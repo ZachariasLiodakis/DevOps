@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{page_layout/layout}">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Rental Applications</title>
+    <link th:href="@{/css/application_numbers.css}" rel="stylesheet">
+</head>
+<body>
+<div layout:fragment="main-content" class="container">
+
+    <div class="custom">
+        <p id="heading">Your Rental Applications</p>
+        <div th:if="${not #lists.isEmpty(RentalApplications)}" style="color: black">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>Estate Name</th>
+                    <th>Application's description</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="rentalApplication : ${RentalApplications}">
+                    <td th:text="${rentalApplication.getProperty().getEstateName()}"></td>
+                    <td th:text="${rentalApplication.getDescription()}"></td>
+                    <td th:text="${rentalApplication.getStatus() == null ? 'Pending' : (rentalApplication.getStatus() ? 'Accepted' : 'Declined')}"></td>
+                    <td th:if="${rentalApplication.getStatus() == false}">
+                        <!-- Form for each delete -->
+                        <form th:action="@{/Renter/RentalApplications/{rentalApplication_id}(rentalApplication_id=${rentalApplication.id})}" method="post">
+                            <button type="submit" class="button1">Delete</button>
+                        </form>
+                    </td>
+
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div th:if="${isSuccess}" style="background-color: rgba(0, 190, 0, 0.8); border-radius: 25px; padding: 15px; font-weight: bold; color: white; display: inline-block;">
+            <p th:text="${success}" style="margin: 0;"></p>
+        </div>
+
+        <div th:if="${isError}" style="background-color: rgba(190, 0,0, 0.8); border-radius: 25px; padding: 15px; font-weight: bold; color: white; display: inline-block;">
+            <p th:text="${error}" style="margin: 0;"></p>
+        </div>
+        <div th:if="${#lists.isEmpty(RentalApplications)}" style="color: black; font-size: 1.2em; font-weight: 500">
+            No submitted rental applications were found!
+        </div>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{page_layout/layout}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rental Application</title>
+    <link th:href="@{/css/application_form.css}" rel="stylesheet">
+</head>
+<body>
+<div layout:fragment="main-content" class="container">
+
+    <form class="default-form" th:action="@{/Renter/rental_application}" method="post" enctype="multipart/form-data">
+        <h1>Rental Application</h1>
+        <!-- Job Situation -->
+        <label for="jobSituation">Job Situation:</label>
+        <input type="text" id="jobSituation" name="jobSituation" required>
+
+        <!-- Rental Duration -->
+        <label for="rentalDuration">Rental Duration (months):</label>
+        <input type="number" id="rentalDuration" name="rentalDuration" min="1" required>
+
+        <!-- Pets -->
+        <label for="pets">Do you have pets?</label>
+        <input type="checkbox" id="pets" name="pets">
+
+        <!-- Rental Application Description -->
+        <label for="applicationDescription">Description for Rental Application:</label>
+        <textarea id="applicationDescription" name="description" rows="5" required></textarea>
+
+        <!-- Κρυφό πεδίο για το property_id -->
+        <input type="hidden" name="property_id" th:value="${property_id}" />
+
+        <!-- Submit Button -->
+        <button type="submit" class="submit-button">Submit Application</button>
+    </form>
+</div>
+
+</body>
+</html>

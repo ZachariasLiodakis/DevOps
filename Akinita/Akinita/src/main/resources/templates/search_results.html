@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{page_layout/layout}" xmlns:sec="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Property Search Results</title>
+    <link th:href="@{/css/search_results.css}" rel="stylesheet">
+</head>
+
+<body>
+<div layout:fragment="main-content">
+    <form  class="form"  method="get">
+        <p id="heading">Property Search Results</p>
+        <div th:if="${#lists.isEmpty(properties)}">
+            <p style="color: black; font-size: 1.5em; margin-bottom: 2em;">No properties found matching your criteria.</p>
+        </div>
+        <div th:if="${ not#lists.isEmpty(properties)}" style="color: rgba(45,45,48,0.90)">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>Estate Name</th>
+                    <th>Description</th>
+                    <th>Location</th>
+                    <th>Square meters</th>
+                    <th>Price</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="property : ${properties}">
+                    <td th:text="${property.getEstateName()}"></td>
+                    <td th:text="${property.getDescription()}"></td>
+                    <td th:text="${property.getLocation()}"></td>
+                    <td th:text="${property.getSquareMeter()}"></td>
+                    <td th:text="${property.getPrice()}"></td>
+                    <td>
+                        <button type="submit" class="button1" th:formaction="@{/Renter/rental_application}" sec:authorize="hasRole('ROLE_RENTER')">Apply for Renting</button>
+                        <input type="hidden" name="property_id" th:value="${property.id}"/>
+                    </td>
+                    <td>
+                        <button type="button" class="button1" th:onclick="|window.location.href='@{/Service/ListingInfo/{property_id}(property_id=${property.id})}'|">
+                            Property Information
+                        </button>
+                    </td>
+                </tr>
+                </tbody>
+
+            </table>
+        </div>
+    </form>
+</div>
+</body>
+</html>

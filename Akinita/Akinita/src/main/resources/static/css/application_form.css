@@ -1,0 +1,89 @@
+
+.default-form {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 1em;
+    padding: 2em;
+    background-color: rgba(255, 255, 255, 0.8);
+    border-radius: 25px;
+    max-width: 600px;
+    margin: 0 auto;
+    box-sizing: border-box;
+}
+
+h1 {
+    text-align: center;
+    grid-column: span 2;
+    font-size: 1.8em;
+    margin-bottom: 2em;
+    font-weight: 700;
+    color: black;
+}
+
+
+.field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5em;
+    padding: 0.6em;
+    background-color: transparent;
+    box-shadow: none;
+    width: auto;
+}
+
+
+label {
+    font-weight: bold;
+    color: black;
+    font-size: 1em;
+}
+
+
+input[type="text"],
+input[type="number"],
+input[type="file"],
+textarea {
+    width: auto;
+    padding: 0.5em;
+    border: none;
+    border-bottom: 2px solid #000;
+    background: transparent;
+    color: black;
+    font-size: 1em;
+}
+
+textarea {
+    resize: none;
+    overflow-y: auto;
+}
+
+button {
+    padding: 0.5em 1em;
+    border-radius: 5px;
+    background-color: #252525;
+    color: white;
+    border: none;
+    outline: none;
+    transition: 0.4s ease-in-out;
+    grid-column: span 2;
+}
+
+button:hover {
+    background-color: white;
+    color: black;
+}
+
+
+@media (max-width: 768px) {
+    form {
+        grid-template-columns: 1fr;
+        gap: 0.8em;
+        padding: 1em;
+    }
+
+    h1 {
+        font-size: 1.5em;
+    }
+
+
+}

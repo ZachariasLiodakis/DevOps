@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{page_layout/layout}">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Listings</title>
+    <link th:href="@{/css/ownerListings.css}" rel="stylesheet">
+</head>
+<body>
+<div layout:fragment="main-content" class="container">
+    <div th:if="${isError}" style="background-color: rgba(255, 0, 0, 0.8); border-radius: 25px; padding: 15px; font-weight: bold; color: white;">
+        <p th:text="${error}" style="margin: 0;"></p>
+    </div>
+    <div th:if="${isSuccess}" style="background-color: rgba(0, 255, 0, 0.8); border-radius: 25px; padding: 15px; font-weight: bold; color: white;">
+        <p th:text="${success}" style="margin: 0;"></p>
+    </div>
+    <form class="form">
+        <p id="heading">Owner's Listings</p>
+        <div th:if="${ not#lists.isEmpty(Listings)}" style="color: black">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>Estate Name</th>
+                    <th>Description</th>
+                    <th>Price</th>
+                    <th>Availability</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="property : ${Listings}">
+                    <td th:text="${property.getEstateName()}"></td>
+                    <td th:text="${property.getDescription()}"></td>
+                    <td th:text="${property.getPrice()}"></td>
+                    <td th:text="${property.isAvailableForSale() ? 'Available' : 'Unavailable'}"></td>
+                    <td th:if="${property.id != null} and ${property.renterId == 0}">
+                        <a class="button1" th:href="@{/Owner/Listings/ChangeAvailability/{property_id}(property_id=${property.id})}">Change Availability</a>
+                    </td>
+                    <td th:if="${property.getId()}"><a class="button1" th:href="@{/Owner/Listings/Delete/{property_id}(property_id=${property.id})}">Delete</a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div th:if="${ #lists.isEmpty(Listings)}" style="color: black; font-size: 1.2em; font-weight: 500">
+            No listings were found!
+        </div>
+    </form>
+</div>
+</body>
+</html>

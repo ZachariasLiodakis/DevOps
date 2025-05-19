@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{page_layout/layout}">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Akinita</title>
+    <link th:href="@{/css/index.css}" rel="stylesheet">
+    <script th:src="@{/js/search_sliders.js}"></script>
+    <script src="https://cdn.jsdelivr.net/gh/habibmhamadi/multi-select-tag@3.1.0/dist/js/multi-select-tag.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/habibmhamadi/multi-select-tag@3.1.0/dist/css/multi-select-tag.css">
+
+</head>
+
+<body>
+<div layout:fragment="main-content" class="container">
+    <div th:if="${isError}" style="background-color: rgba(255, 0, 0, 0.8); border-radius: 25px; padding: 15px; font-weight: bold; color: white;">
+        <p th:text="${error}" style="margin: 0;"></p>
+    </div>
+    <form class="form" th:action="@{/Service/searchProperties}" method="get">
+        <!-- Location and Property Type in the same row -->
+        <div class="row">
+            <label>Location</label>
+            <label>Property Type</label>
+        </div>
+
+        <div class="field-row">
+            <div class="field">
+                <label>
+                    <input autocomplete="off" placeholder="Location" class="input-field" type="text" name="location">
+                </label>
+            </div>
+            <div class="field">
+
+                <select id="propertyType" name="propertyType">
+                    <option value="All">All</option>
+                    <option value="CommercialProperty">Commercial Property</option>
+                    <option value="Parking">Parking</option>
+                    <option value="Land">Land</option>
+                    <option value="House">House</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Checkbox to show extra fields based on property type -->
+        <div class="field">
+            <label for="showExtraFields">
+                <input type="checkbox" id="showExtraFields"> Show extra options based on property type
+            </label>
+        </div>
+
+        <!-- Dynamic Fields Based on Property Type (Initially Hidden) -->
+        <div id="dynamicFields">
+            <!-- Price Range Fields -->
+            <div class="field">
+                <label for="minPrice">Min Price</label>
+                <input type="number" id="minPrice" name="minPrice" placeholder="Min Price" min="1" max="100000000" value="1">
+            </div>
+            <div class="field">
+                <label for="maxPrice">Max Price</label>
+                <input type="number" id="maxPrice" name="maxPrice" placeholder="Max Price" min="1" max="100000000" value="100000000">
+            </div>
+            <div class="field">
+                <label for="priceSlider">Price Range:</label>
+                <input type="range" id="priceSlider" name="priceRange" min="0" max="100000000" step="1000" value="0">
+                <output for="priceSlider" id="priceDisplay">€0</output>
+            </div>
+
+            <!-- Square Meter Fields -->
+            <div class="field">
+                <label for="minSize">Min Size (sq meters)</label>
+                <input type="number" id="minSize" name="minSize" placeholder="Min Size" min="1" max="100000" value="1">
+            </div>
+            <div class="field">
+                <label for="maxSize">Max Size (sq meters)</label>
+                <input type="number" id="maxSize" name="maxSize" placeholder="Max Size" min="1" max="100000" value="100000">
+            </div>
+            <div class="field">
+                <label for="sizeSlider">Size Range:</label>
+                <input type="range" id="sizeSlider" name="sizeRange" min="1" max="100000" step="1" value="1">
+                <output for="sizeSlider" id="sizeDisplay">1 m²</output>
+            </div>
+
+            <!-- Building Fees -->
+            <div class="field" id="buildingFeesField" style="display:none;">
+                <svg class="input-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"></svg>
+                <label for="buildingFees">Building Fees</label>
+                <label class="checkbox_BF">
+                    <input type="checkbox" id="buildingFees" name="buildingFees" value="">
+                    <svg viewBox="0 0 64 64" height="2em" width="2em">
+                        <path d="M 0 16 V 56 A 8 8 90 0 0 8 64 H 56 A 8 8 90 0 0 64 56 V 8 A 8 8 90 0 0 56 0 H 8 A 8 8 90 0 0 0 8 V 16 L 32 48 L 64 16 V 8 A 8 8 90 0 0 56 0 H 8 A 8 8 90 0 0 0 8 V 56 A 8 8 90 0 0 8 64 H 56 A 8 8 90 0 0 64 56 V 16" pathLength="575.0541381835938" class="path"></path>
+                    </svg>
+                </label>
+
+            </div>
+
+            <!-- Construction Date  -->
+            <div class="field" id="constructionDateField" style="display:none;">
+                <label for="constructionDate">Construction Date</label>
+                <input type="date" id="constructionDate" name="constructionDate" value="1000-02-10">
+            </div>
+
+            <!-- Facilities -->
+            <div  id="facilitiesField" style="display:none;">
+                <label for="facilities">Facilities</label><select id="facilities" name="facilities" multiple>
+                    <option value="All">All</option>
+                    <option value="AC">Air Conditioning (AC)</option>
+                    <option value="Elevator">Elevator</option>
+                    <option value="Parking">Parking</option>
+                    <option value="Garden">Garden</option>
+                    <option value="Fireplace">Fireplace</option>
+                    <option value="Pool">Pool</option>
+                    <option value="Storage">Storage</option>
+                    <option value="Alarm">Alarm</option>
+                </select>
+                <script>
+                    new MultiSelectTag('facilities', {
+                        rounded: true,    // default true
+                        shadow: true,      // default false
+                        placeholder: 'Search',  // default Search...
+                        tagColor: {
+                            textColor: '#327b2c',
+                            borderColor: '#92e681',
+                            bgColor: '#eaffe6',
+                        }
+                    })
+                </script>
+            </div>
+
+            <!-- Energy Class -->
+            <div class="field" id="energyClassField" style="display:none;">
+                <label for="energyClass">Energy Class</label>
+                <label>
+                    <select class="roleList" id="energyClass" name="energyClass">
+                        <option value="">Empty</option>
+                        <option value="Apls">A+</option>
+                        <option value="A">A</option>
+                        <option value="Bpls">B+</option>
+                        <option value="B">B</option>
+                        <option value="C">C</option>
+                        <option value="D">D</option>
+                        <option value="E">E</option>
+                        <option value="Z">Z</option>
+                        <option value="H">H</option>
+                    </select>
+                </label>
+            </div>
+
+
+        </div>
+
+        <button type="submit" class="button1">Search</button>
+    </form>
+</div>
+</body>
+
+
+</html>
