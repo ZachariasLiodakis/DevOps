@@ -31,7 +31,7 @@ stages {
                 cd Akinita/
                 ls -l Akinita/
                 ls -l Akinita/src/
-                docker build --rm -t $DOCKER_PREFIX:$TAG -t $DOCKER_PREFIX:latest -f Akinita/Dockerfile .
+                docker build --rm -t $DOCKER_PREFIX:$TAG -t $DOCKER_PREFIX:latest -f Dockerfile .
             '''
             sh '''
                 echo $DOCKER_TOKEN | docker login $DOCKER_SERVER -u $DOCKER_USER --password-stdin
