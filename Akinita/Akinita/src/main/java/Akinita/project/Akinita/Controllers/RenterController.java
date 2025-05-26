@@ -33,7 +33,7 @@ public class RenterController {
     @GetMapping("/rental_application")
     public String RenterRentalApplications(Model model, @RequestParam("property_id") Property property) {
         model.addAttribute("property_id", property.getId());
-        return "/renter/rental_application";
+        return "renter/rental_application";
     }
 
     @PostMapping("/rental_application")
@@ -89,7 +89,7 @@ public class RenterController {
 
     @GetMapping("/applicationSubmitted")
     public String RentalApplicationsSub() {
-        return "/renter/applicationSubmitted";
+        return "renter/applicationSubmitted";
     }
 
     @Secured("ROLE_ADMIN")

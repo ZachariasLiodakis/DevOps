@@ -12,7 +12,7 @@ services:
     healthcheck:
       test:
         - CMD-SHELL
-        - pg_isready -U postgres
+        - pg_isready -U dbuser -d akinita
       interval: 30s
       timeout: 60s
       retries: 3
