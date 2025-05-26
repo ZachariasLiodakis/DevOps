@@ -13,7 +13,7 @@ stages {
 
     stage('Test') {
         steps {
-            ssh '''
+            sh '''
                 echo "Start testing"
                 ./mvnw test
                 ''' 
