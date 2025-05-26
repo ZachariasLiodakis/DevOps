@@ -19,4 +19,4 @@ dbservers:
 azure-hosts:
   hosts:
     devops-vm-1:
-      ansible_host: az-devops
+      ansible_host: "{{ vm_ip }}"
