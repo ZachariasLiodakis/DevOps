@@ -15,6 +15,7 @@ stages {
         steps {
             sh '''
                 echo "Start testing"
+                cd Akinita/Akinita
                 ./mvnw test
                 ''' 
         }
