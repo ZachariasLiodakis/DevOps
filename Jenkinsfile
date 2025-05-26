@@ -6,7 +6,7 @@ environment {
     DOCKER_TOKEN=credentials('docker-push-secret')
     DOCKER_USER= 'zachariasliodakis'
     DOCKER_SERVER= 'ghcr.io'
-    DOCKER_PREFIX='ghcr.io/zachariasliodakis/Akinita'
+    DOCKER_PREFIX='ghcr.io/zachariasliodakis/devops'
     }
 
 stages {
