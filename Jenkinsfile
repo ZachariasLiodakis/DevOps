@@ -16,6 +16,7 @@ stages {
             sh '''
                 echo "Start testing"
                 cd Akinita/Akinita
+                chmod +x mvnw
                 ./mvnw test
                 ''' 
         }
