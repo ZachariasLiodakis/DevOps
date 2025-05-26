@@ -135,7 +135,7 @@ public class PropertyController {
     @GetMapping("/AcceptListings") //Μέθοδος προβολής ιδιοκτησιών προς αποδοχή από τον admin
     public String updateProperties(Model model){
         model.addAttribute("properties", propertyService.findAllInvisibleProperties()); //Προσθήκη ιδιοκτησιών στο model
-        return "/properties/updateProperties";
+        return "properties/updateProperties";
     }
 
     @Secured("ROLE_ADMIN")

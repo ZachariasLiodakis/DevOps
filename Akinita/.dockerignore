@@ -1,0 +1,33 @@
+# Git
+.git/
+.gitignore
+
+
+### Intellij IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+
+### VS Code ###
+.vscode/
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Build Scripts
+build/
+out/
+
+# Docker files
+docker-compose*.yml
+Dockerfile*
+
+# Temp files
+*.tmp
+*.bak
+*.swp
