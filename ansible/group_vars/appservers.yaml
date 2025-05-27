@@ -1,4 +1,4 @@
-appdir: "{{ ansible_user_dir }}/spring"
+appdir: "{{ ansible_user_dir }}/spring/"
 branch: "main"
 appuser: "{{ansible_user_id}}"
 appgroup: "{{ansible_user_gid}}"
@@ -10,4 +10,4 @@ app:
     server.port: "{{app_port}}"
     spring.datasource.username: appuser
     spring.datasource.password: apppassword
-    spring.datasource.url: jdbc:postgresql://dbserver:5432/appdb
+    spring.datasource.url: jdbc:postgresql://localhost:5432/appdb
