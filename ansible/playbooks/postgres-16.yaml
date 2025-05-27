@@ -43,7 +43,7 @@
         name: "{{ db.user }}"
         password: "{{ db.password }}"
       become: yes
-      # No become_user, let Ansible handle via socket
+      become_user: postgres
       tags: [db]
 
     - name: Ensure Postgres database exists
@@ -51,7 +51,9 @@
         name: "{{ db.name }}"
         owner: "{{ db.user }}"
       become: yes
+      become_user: postgres
       tags: [db]
+
 
   handlers:
     - name: restart postgres
