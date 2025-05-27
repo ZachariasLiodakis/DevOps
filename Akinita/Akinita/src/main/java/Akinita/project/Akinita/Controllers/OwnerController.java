@@ -234,6 +234,7 @@ public class OwnerController {
     public String ownerListings(Model model, Principal principal) {
         String email = principal.getName();
         Integer ownerId = ownerService.getOwnerIdByEmail(email);
+        System.out.println("OWNER ID:"+ownerId);
         model.addAttribute("Listings", ownerService.getOwnerProperties(ownerId)); //Προσθήκη στο model
         return "properties/ownerListings";
     }
