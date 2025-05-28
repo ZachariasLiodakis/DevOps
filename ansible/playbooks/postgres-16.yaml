@@ -29,6 +29,15 @@
           notify: restart postgres
           tags: [edit]
 
+        - name: Allow local trust auth for postgres user
+          lineinfile:
+            path: /etc/postgresql/16/main/pg_hba.conf
+            regexp: '^local\s+all\s+postgres\s+'
+            line: 'local   all             postgres                                trust'
+          notify: restart postgres
+          tags: [edit]
+
+
         - name: Allow MD5 auth for all IPs
           lineinfile:
             path: /etc/postgresql/16/main/pg_hba.conf
