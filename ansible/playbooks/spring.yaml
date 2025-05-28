@@ -23,7 +23,7 @@
 
       - name: "Populate application.properties"
         lineinfile:
-          dest: "{{ appdir }}Akinita/Akinita/src/main/resources/application.properties"
+          dest: "{{ appdir }}/Akinita/Akinita/src/main/resources/application.properties"
           state: present
           regexp: "^{{item.key}}="
           line: "{{item.key}}={{item.value}}"
