@@ -5,9 +5,9 @@
   become_user: root
   vars:
     db:
-      user: myuser
-      password: mypassword
-      name: mydb
+      user: appuser
+      password: apppassword
+      name: appdb
       postgres_password: securepass
 
   tasks:
