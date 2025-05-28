@@ -84,7 +84,7 @@
 
       - name: copy spring service file
         template:
-          src: ..ansible/files/spring.service.j2
+          src: ../ansible/files/spring.service.j2
           dest: "/etc/systemd/system/spring.service"
         become: yes
         become_user: root
@@ -111,7 +111,7 @@
 
       - name: copy nginx conf file
         template:
-          src: ..ansible/files/nginx.http.j2
+          src: ../ansible/files/nginx.http.j2
           dest: "/etc/nginx/sites-available/spring"
         become: yes
 
