@@ -25,6 +25,7 @@ public interface CommercialPropertyGenericRepository extends PropertyGenericRepo
     @Query("SELECT h FROM CommercialProperty h WHERE h.owner.userId = :userId")
     List<CommercialProperty> findByOwnerId(@Param("userId") int userId);
 
+    @Query("SELECT c FROM CommercialProperty c WHERE (c.visibility = :visibility1 OR c.visibility = :visibility2) AND c.owner.userId = :ownerId")
     List<CommercialProperty> findByVisibilityOrVisibilityAndOwner_UserId(String visibility1, String visibility2, int ownerId);
 
     @Query("SELECT CASE WHEN COUNT(cf) = :facilitiesSize THEN true ELSE false END " +

@@ -22,6 +22,7 @@ public interface ParkingGenericRepository extends PropertyGenericRepository<Park
     @Query("SELECT pr FROM Parking pr JOIN Property p ON p.id = pr.id WHERE p.id = :id")
     Parking findByParkingId(@Param("id") Integer id);
 
+    @Query("SELECT pr FROM Parking pr WHERE (pr.visibility = :visibility1 OR pr.visibility = :visibility2) AND pr.owner.userId = :ownerId")
     List<Parking> findByVisibilityOrVisibilityAndOwner_UserId(String visibility1, String visibility2, int ownerId);
 
     @Query("SELECT CASE WHEN p.energyClass = :energyClass THEN true ELSE false END FROM Parking p WHERE p.id = :parkingId")

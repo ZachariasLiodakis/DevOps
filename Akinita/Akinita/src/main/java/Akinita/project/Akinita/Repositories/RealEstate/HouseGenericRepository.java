@@ -25,7 +25,12 @@ public interface HouseGenericRepository extends PropertyGenericRepository<House,
     @Query("SELECT h FROM House h WHERE h.owner.userId = :userId")
     List<House> findByOwnerId(@Param("userId") int userId);
 
-    List<House> findByVisibilityOrVisibilityAndOwner_UserId(String visibility1, String visibility2, int ownerId);
+    @Query("SELECT h FROM House h WHERE (h.visibility = :visibility1 OR h.visibility = :visibility2) AND h.owner.userId = :ownerId")
+    List<House> findByVisibilityOrVisibilityAndOwner_UserId(
+            @Param("visibility1") String visibility1,
+            @Param("visibility2") String visibility2,
+            @Param("ownerId") int ownerId);
+
 
     @Query("SELECT CASE WHEN COUNT(hf) = :facilitiesSize THEN true ELSE false END " +
             "FROM House h JOIN h.facilities hf " +
