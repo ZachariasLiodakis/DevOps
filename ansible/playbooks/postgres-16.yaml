@@ -43,7 +43,6 @@
         name: "{{ db.user }}"
         password: "{{ db.password }}"
       become: yes
-      become_user: postgres
       tags: [db]
 
     - name: Ensure Postgres database exists
@@ -51,7 +50,6 @@
         name: "{{ db.name }}"
         owner: "{{ db.user }}"
       become: yes
-      become_user: postgres
       tags: [db]
 
 
