@@ -59,7 +59,7 @@
 
         - name: Replace the distributionSha512Sum line in maven-wrapper.properties
           replace:
-            path: "{{ appdir }}/.mvn/wrapper/maven-wrapper.properties"
+            path: "{{ appdir }}/Akinita/Akinita/.mvn/wrapper/maven-wrapper.properties"
             regexp: '^distributionSha'
             replace: "distributionSha512Sum={{ sha512_checksum.stdout }}"
         
