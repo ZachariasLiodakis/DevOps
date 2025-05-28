@@ -70,6 +70,12 @@
           when: sha512_checksum is defined
         
         always:
+          - name: Make mvnw executable
+            file:
+              path: "{{ appdir }}/Akinita/Akinita/mvnw"
+              mode: '0755'
+              state: file
+              
           - name: "Build the Spring application"
             command: "./mvnw package -Dmaven.test.skip "
             args:
