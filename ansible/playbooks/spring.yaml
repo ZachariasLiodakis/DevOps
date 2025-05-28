@@ -75,7 +75,7 @@
               path: "{{ appdir }}/Akinita/Akinita/mvnw"
               mode: '0755'
               state: file
-
+              
           - name: "Build the Spring application"
             command: "./mvnw package -Dmaven.test.skip "
             args:
@@ -84,11 +84,11 @@
 
       - name: copy spring service file
         template:
-          src: spring.service.j2
-          dest: /etc/systemd/system/spring.service
+          src: ../files/spring.service.j2
+          dest: "/etc/systemd/system/spring.service"
         become: yes
+        become_user: root
         notify: restart spring
-
 
       - name: reload spring service
         service:
