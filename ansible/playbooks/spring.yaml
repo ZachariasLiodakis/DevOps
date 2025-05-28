@@ -73,7 +73,7 @@
           - name: "Build the Spring application"
             command: "./mvnw package -Dmaven.test.skip "
             args:
-                chdir: "{{ appdir }}"
+                chdir: "{{ appdir }}/Akinita?akinita"
 
 
       - name: copy spring service file
