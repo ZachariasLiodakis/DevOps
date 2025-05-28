@@ -8,6 +8,7 @@
       user: myuser
       password: mypassword
       name: mydb
+      postgres_password: securepass
 
   tasks:
     - name: Ensure required packages are installed
@@ -37,7 +38,6 @@
           notify: restart postgres
           tags: [edit]
 
-
         - name: Allow MD5 auth for all IPs
           lineinfile:
             path: /etc/postgresql/16/main/pg_hba.conf
@@ -51,18 +51,21 @@
       postgresql_user:
         name: "{{ db.user }}"
         password: "{{ db.password }}"
-      become: yes
-      become_user: postgres
+        login_user: postgres
+        login_password: "{{ db.postgres_password }}"
+        login_host: localhost
+        login_unix_socket: /var/run/postgresql
       tags: [db]
 
     - name: Ensure Postgres database exists
       postgresql_db:
         name: "{{ db.name }}"
         owner: "{{ db.user }}"
-      become: yes
-      become_user: postgres
+        login_user: postgres
+        login_password: "{{ db.postgres_password }}"
+        login_host: localhost
+        login_unix_socket: /var/run/postgresql
       tags: [db]
-
 
   handlers:
     - name: restart postgres
