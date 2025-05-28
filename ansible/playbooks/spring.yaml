@@ -1,5 +1,5 @@
 ---
-- hosts: all
+- hosts: dbservers
 
   pre_tasks:
     - name: Install Java
