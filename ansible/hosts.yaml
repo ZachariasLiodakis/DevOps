@@ -10,4 +10,5 @@ azure-hosts:
   hosts:
     devops-vm:
       ansible_host: "{{ vm_ip }}"
+      ansible_user: azureuser
       ansible_ssh_common_args: '-o StrictHostKeyChecking=no'
