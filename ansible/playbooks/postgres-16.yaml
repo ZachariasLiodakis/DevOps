@@ -1,74 +1,61 @@
----
-- name: Install and configure PostgreSQL
-  hosts: dbservers
+- name: Ensure required packages are installed
   become: yes
-  become_user: root
-  vars:
-    db:
-      user: appuser
-      password: apppassword
-      name: appdb
-      postgres_password: securepass
+  apt:
+    name: 
+      - postgresql
+      - python3-pip
+      - python3-psycopg2
+    state: present
+    update_cache: yes
+  tags: [install]
 
-  tasks:
-    - name: Ensure required packages are installed
-      apt:
-        name: 
-          - postgresql
-          - python3-pip
-          - python3-psycopg2
-        state: present
-        update_cache: yes
-      tags: [install]
+- block:
+    - name: Edit postgresql.conf to allow all addresses
+      become: yes
+      lineinfile:
+        path: /etc/postgresql/16/main/postgresql.conf
+        regexp: '^#listen_addresses ='
+        line: "listen_addresses = '*'"
+      notify: restart postgres
+      tags: [edit]
 
-    - block:
-        - name: Edit postgresql.conf to allow all addresses
-          lineinfile:
-            path: /etc/postgresql/16/main/postgresql.conf
-            regexp: '^#listen_addresses ='
-            line: "listen_addresses = '*'"
-          notify: restart postgres
-          tags: [edit]
+    - name: Allow local trust auth for postgres user
+      become: yes
+      lineinfile:
+        path: /etc/postgresql/16/main/pg_hba.conf
+        regexp: '^local\s+all\s+postgres\s+'
+        line: 'local   all             postgres                                trust'
+      notify: restart postgres
+      tags: [edit]
 
-        - name: Allow local trust auth for postgres user
-          lineinfile:
-            path: /etc/postgresql/16/main/pg_hba.conf
-            regexp: '^local\s+all\s+postgres\s+'
-            line: 'local   all             postgres                                trust'
-          notify: restart postgres
-          tags: [edit]
+    - name: Allow MD5 auth for all IPs
+      become: yes
+      lineinfile:
+        path: /etc/postgresql/16/main/pg_hba.conf
+        line: "host    all             all             0.0.0.0/0               md5"
+        create: yes
+      notify: restart postgres
+      tags: [edit]
+  when: ansible_distribution == 'Ubuntu' and ansible_distribution_version == '24.04'
 
-        - name: Allow MD5 auth for all IPs
-          lineinfile:
-            path: /etc/postgresql/16/main/pg_hba.conf
-            line: "host    all             all             0.0.0.0/0               md5"
-            create: yes
-          notify: restart postgres
-          tags: [edit]
-      when: ansible_distribution == 'Ubuntu' and ansible_distribution_version == '24.04'
+- name: Ensure Postgres user exists
+  become: yes
+  postgresql_user:
+    name: "{{ db.user }}"
+    password: "{{ db.password }}"
+    login_user: postgres
+    login_password: "{{ db.postgres_password }}"
+    login_host: localhost
+    login_unix_socket: /var/run/postgresql
+  tags: [db]
 
-    - name: Ensure Postgres user exists
-      postgresql_user:
-        name: "{{ db.user }}"
-        password: "{{ db.password }}"
-        login_user: postgres
-        login_password: "{{ db.postgres_password }}"
-        login_host: localhost
-        login_unix_socket: /var/run/postgresql
-      tags: [db]
-
-    - name: Ensure Postgres database exists
-      postgresql_db:
-        name: "{{ db.name }}"
-        owner: "{{ db.user }}"
-        login_user: postgres
-        login_password: "{{ db.postgres_password }}"
-        login_host: localhost
-        login_unix_socket: /var/run/postgresql
-      tags: [db]
-
-  handlers:
-    - name: restart postgres
-      service:
-        name: postgresql
-        state: restarted
+- name: Ensure Postgres database exists
+  become: yes
+  postgresql_db:
+    name: "{{ db.name }}"
+    owner: "{{ db.user }}"
+    login_user: postgres
+    login_password: "{{ db.postgres_password }}"
+    login_host: localhost
+    login_unix_socket: /var/run/postgresql
+  tags: [db]

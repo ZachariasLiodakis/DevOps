@@ -139,6 +139,12 @@
         notify: restart nginx
 
   handlers:
+  - name: restart postgres
+    service:
+      name: postgresql
+      state: restarted
+    become: yes
+
   - name: restart spring
     service:
       name: spring
