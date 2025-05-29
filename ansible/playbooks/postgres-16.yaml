@@ -38,6 +38,7 @@
       tags: [edit]
   when: ansible_distribution == 'Ubuntu' and ansible_distribution_version == '24.04'
 
+  always:
 - name: Ensure Postgres user exists
   become: yes
   postgresql_user:
