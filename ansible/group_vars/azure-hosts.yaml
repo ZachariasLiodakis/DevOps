@@ -1,4 +1,4 @@
-appdir: "{{ ansible_user_dir }}/spring/"
+appdir: "{{ ansible_user_dir }}/spring"
 branch: "main"
 appuser: "{{ansible_user_id}}"
 appgroup: "{{ansible_user_gid}}"
