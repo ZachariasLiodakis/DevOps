@@ -73,6 +73,12 @@
       
       - name: "Build spring project"
         block:
+        - name: Ensure mvnw is executable
+          file:
+            path: "{{ appdir }}/Akinita/Akinita/mvnw"
+            mode: '0755'
+            state: file
+          become: yes
 
         - name: "Build the Spring application"
           become: yes
