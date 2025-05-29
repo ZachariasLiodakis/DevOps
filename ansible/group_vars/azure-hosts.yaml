@@ -10,8 +10,3 @@ app:
     spring.datasource.username: appuser
     spring.datasource.password: apppassword
     spring.datasource.url: jdbc:postgresql://dbserver:5432/appdb
-
-db:
-  name: "appdb"
-  user: "appuser"
-  password: "apppassword"
