@@ -20,6 +20,28 @@
     include_tasks: postgres-16.yaml
     when: not postgres_installed
 
+  - name: Ensure Postgres user exists
+    become: yes
+    postgresql_user:
+      name: "{{ db.user }}"
+      password: "{{ db.password }}"
+      login_user: postgres
+      login_password: "{{ db.postgres_password }}"
+      login_host: localhost
+      login_unix_socket: /var/run/postgresql
+    tags: [db]
+
+  - name: Ensure Postgres database exists
+    become: yes
+    postgresql_db:
+      name: "{{ db.name }}"
+      owner: "{{ db.user }}"
+      login_user: postgres
+      login_password: "{{ db.postgres_password }}"
+      login_host: localhost
+      login_unix_socket: /var/run/postgresql
+    tags: [db]
+
   - name: Install Java
     apt:
         name: openjdk-21-jdk

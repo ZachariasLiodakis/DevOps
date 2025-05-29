@@ -37,25 +37,3 @@
       notify: restart postgres
       tags: [edit]
   when: ansible_distribution == 'Ubuntu' and ansible_distribution_version == '24.04'
-
-- name: Ensure Postgres user exists
-  become: yes
-  postgresql_user:
-    name: "{{ db.user }}"
-    password: "{{ db.password }}"
-    login_user: postgres
-    login_password: "{{ db.postgres_password }}"
-    login_host: localhost
-    login_unix_socket: /var/run/postgresql
-  tags: [db]
-
-- name: Ensure Postgres database exists
-  become: yes
-  postgresql_db:
-    name: "{{ db.name }}"
-    owner: "{{ db.user }}"
-    login_user: postgres
-    login_password: "{{ db.postgres_password }}"
-    login_host: localhost
-    login_unix_socket: /var/run/postgresql
-  tags: [db]
