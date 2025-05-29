@@ -1,5 +1,5 @@
 ---
-- hosts: devops-vm-1
+- hosts: devops-vm
   tasks:
 
     - name: Check if Docker is installed

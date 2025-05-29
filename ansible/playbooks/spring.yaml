@@ -1,7 +1,20 @@
 ---
-- hosts: dbservers
+- hosts: devops-vm
 
   pre_tasks:
+    - name: Check if PostgreSQL 16 is installed
+      shell: psql --version | grep "16"
+      register: postgres_version_result
+      ignore_errors: true
+
+    - name: Set PostgreSQL installed fact
+      set_fact:
+        postgres_installed: "{{ postgres_version_result.rc == 0 }}"
+
+    - name: Include postgres-16 playbook if PostgreSQL 16 is not installed
+      include_tasks: postgres-16.yaml
+      when: not postgres_installed
+
     - name: Install Java
       apt:
           name: openjdk-21-jdk
@@ -38,11 +51,6 @@
           command: "./mvnw package -Dmaven.test.skip "
           args:
               chdir: "{{ appdir }}"
-
-  #      - name: "Run the Spring application"
-  #        command: "java -jar target/springbootdemo-0.0.1-SNAPSHOT.jar"
-  #        args:
-  #            chdir: "{{ appdir }}"
 
         rescue:
 
