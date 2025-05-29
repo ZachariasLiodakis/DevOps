@@ -2,29 +2,30 @@
 - hosts: devops-vm
 
   pre_tasks:
-    - name: Check if PostgreSQL 16 is installed
-      shell: psql --version | grep "16"
-      register: postgres_version_result
-      ignore_errors: true
+  - name: Check if PostgreSQL 16 is installed
+    shell: psql --version | grep "16"
+    register: postgres_version_result
+    ignore_errors: true
 
-    - name: Set PostgreSQL installed fact
-      set_fact:
-        postgres_installed: "{{ postgres_version_result.rc == 0 }}"
+  - name: Stat PostgreSQL 16 config file
+    stat:
+      path: /etc/postgresql/16/main/postgresql.conf
+    register: postgres_16_conf
 
-    - name: Set PostgreSQL installed fact based on conf file check
-      set_fact:
-          postgres_installed_conf: "{{ postgres_16_conf.stat.exists }}"
+  - name: Set PostgreSQL installed fact
+    set_fact:
+      postgres_installed: "{{ postgres_version_result.rc == 0 or postgres_16_conf.stat.exists }}"
 
-    - name: Include postgres-16 playbook if PostgreSQL 16 is not installed
-      include_tasks: postgres-16.yaml
-      when: not postgres_installed
+  - name: Include postgres-16 playbook if PostgreSQL 16 is not installed
+    include_tasks: postgres-16.yaml
+    when: not postgres_installed
 
-    - name: Install Java
-      apt:
-          name: openjdk-21-jdk
-          state: present
-          update_cache: yes
-      become: yes
+  - name: Install Java
+    apt:
+        name: openjdk-21-jdk
+        state: present
+        update_cache: yes
+    become: yes
 
   tasks:
       - name: "debug appdir"
