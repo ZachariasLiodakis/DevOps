@@ -10,3 +10,7 @@ app:
     spring.datasource.username: appuser
     spring.datasource.password: apppassword
     spring.datasource.url: jdbc:postgresql://dbserver:5432/appdb
+
+service:
+  workingdir: "{{ ansible_user_dir }}/spring"
+  execstart: "java -jar {{ ansible_user_dir }}/spring//Akinita/Akinita/target/ds-lab-2024-0.0.1-SNAPSHOT.jar"
