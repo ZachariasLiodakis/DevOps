@@ -50,7 +50,7 @@
         - name: "Build the Spring application"
           command: "./mvnw package -Dmaven.test.skip "
           args:
-              chdir: "{{ appdir }}"
+              chdir: "{{ appdir }}/Akinita/Akinita"
 
         rescue:
 
@@ -85,7 +85,7 @@
               state: file
               
           - name: "Build the Spring application"
-            command: "./mvnw package -Dmaven.test.skip "
+            command: "./mvnw package -Dmaven.test.skip"
             args:
                 chdir: "{{ appdir }}/Akinita/Akinita"
 
