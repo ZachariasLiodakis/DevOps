@@ -24,8 +24,7 @@
 
 ### 1. Ανάπτυξη με Ansible σε VM
 ```bash
-cd DevOps/ansible/
-ansible-playbook -i hosts.yaml playbooks/spring.yaml -e "vm_ip=YOUR_VM_IP"
+ansible-playbook -i ansible/hosts.yaml ansible/playbooks/spring.yaml -e "vm_ip=YOUR_VM_IP"
 ```
 
 ### 2.1 Τοπική Ανάπτυξη με Docker Compose
@@ -37,6 +36,5 @@ docker-compose up --build
 
 ### 2.2 Ανάπτυξη με Docker Compose και Anisble σε VM
 ```bash
-cd DevOps/ansible/
-ansible-playbook -i hosts.yaml playbooks/deploy-compose.yaml -e "vm_ip=YOUR_VM_IP"
+ansible-playbook -i ansible/hosts.yaml ansible/playbooks/deploy-compose.yaml -e "vm_ip=YOUR_VM_IP"
 ```
