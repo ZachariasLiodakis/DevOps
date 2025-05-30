@@ -38,3 +38,7 @@ docker-compose up --build
 ```bash
 ansible-playbook -i ansible/hosts.yaml ansible/playbooks/deploy-compose.yaml -e "vm_ip=YOUR_VM_IP"
 ```
+
+### Πρόσβαση στην εφαρμογή
+Για την πρόσβαση στην εφαρμογή μέσω VM: http://YOUR_VM_IP:8080
+Για την πρόσβαση στην εφαρμογή τοπικά: http://locahost:8080
