@@ -1,0 +1,31 @@
+.idea/
+*.iml
+
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Build artifacts
+/target/
+/build/
+
+# Maven / Gradle
+.mvn/
+.gradle/
+!gradle-wrapper.jar
+
+# Docker
+*.env
+docker-compose.override.yml
+
+# SSL certs
+certs/
+*.pem
+*.key
+*.crt
+
+# IntelliJ run configs
+*.iws
+out/
