@@ -30,7 +30,7 @@ ansible-playbook -i ansible/hosts.yaml ansible/playbooks/spring.yaml -e "vm_ip=Y
 ### 2.1 Τοπική Ανάπτυξη με Docker Compose
 
 ```bash
-cd devops
+cd DevOps
 docker-compose up --build
 ```
 
