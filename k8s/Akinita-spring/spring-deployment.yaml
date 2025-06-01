@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
       - name:  spring
-        image:  ghcr.io/tsadimas/ds-lab-2024:0f3ade0-1
+        image: ghcr.io/zachariasliodakis/devops:latest
         livenessProbe:
           httpGet:
             path: "/actuator/health/liveness"
