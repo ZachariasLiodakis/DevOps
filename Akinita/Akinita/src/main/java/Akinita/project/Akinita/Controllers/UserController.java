@@ -103,6 +103,7 @@ public class UserController {
             }catch (Exception e){
                 throw new RuntimeException("Saving renter failed");
             }
+
             return "redirect:/Renter/registrationSubmitted";
         }
     }
