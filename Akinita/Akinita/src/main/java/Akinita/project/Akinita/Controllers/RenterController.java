@@ -110,7 +110,7 @@ public class RenterController {
     @Secured("ROLE_ADMIN")
     @Transactional
     @GetMapping("/AcceptRenters/{renter_id}") //Μέθοδος αποδοχής Renter
-    public String acceptRenters(Model model, @PathVariable Integer renter_id) {
+    public String acceptRenters(Model model, @PathVariable Integer renter_id) throws MessagingException {
         Renter the_renter = renterService.getRenterById(renter_id);
         the_renter.setAcceptance("Accepted"); //Αλλαγή απο "Unaccepted" σε "Accepted"
         try{
@@ -118,6 +118,8 @@ public class RenterController {
         }catch (Exception e){
             throw new RuntimeException("Could not update renter");
         }
+
+        emailSenderService.sendMail(the_renter.getUser().getEmail(), "Your renter account has been accepted!","Your renter account has been successfully reviewed and accepted by the admin. \n You can now freely explore what our website has to offer!");
         return "redirect:/Renter/AcceptRenters";
     }
 

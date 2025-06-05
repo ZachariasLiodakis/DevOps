@@ -111,7 +111,7 @@ public class UserController {
 
             emailSenderService.sendMail(user.getEmail(),"Renter Registration Submission of " + user.getUsername(),"Your register application has been submitted and sent by email to Admin!\n" +
                     "Please wait while the admin reviews it...");
-            emailSenderService.sendMail(userService.getUser(1).getEmail(),"Renter Registration Submission of " + user.getUsername(),"The user " + user.getUsername() + "registered an application for a renter account, please enter to review it");      // ideally it would provide a link but for now it's not needed
+            emailSenderService.sendMail(userService.getUser(1).getEmail(),"Renter Registration Submission of " + user.getUsername(),"The user " + user.getUsername() + " registered an application for a renter account, please enter to review it");      // ideally it would provide a link but for now it's not needed
 
             return "redirect:/Renter/registrationSubmitted";
         }
