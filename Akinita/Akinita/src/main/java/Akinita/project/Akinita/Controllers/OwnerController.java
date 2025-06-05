@@ -7,10 +7,8 @@ import Akinita.project.Akinita.Entities.Enums.Facilities;
 import Akinita.project.Akinita.Entities.Properties.*;
 import Akinita.project.Akinita.Entities.RentalApplication;
 import Akinita.project.Akinita.Interfaces.RealEstate;
-import Akinita.project.Akinita.Services.ApplicationService;
-import Akinita.project.Akinita.Services.OwnerService;
-import Akinita.project.Akinita.Services.PropertyService;
-import Akinita.project.Akinita.Services.RenterService;
+import Akinita.project.Akinita.Services.*;
+import jakarta.mail.MessagingException;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -35,6 +33,10 @@ public class OwnerController {
     private ApplicationService applicationService; //Δήλωση του application Service
     @Autowired
     private RenterService renterService;
+    @Autowired
+    private EmailSenderService emailSenderService;
+    @Autowired
+    private UserService userService;
 
     @GetMapping("/submitProperty") //Μέθοδος επιστροφής φόρμας για εισαγωγή γενικών πληροφοριών ιδιοκτησίας
     public String submitProperty() {
@@ -51,7 +53,7 @@ public class OwnerController {
                                      @ModelAttribute RealEstate realEstate,
                                      @RequestParam(value = "buildingFees", required = false) Boolean bf,
                                      Model model,
-                                     RedirectAttributes redirectAttributes) {
+                                     RedirectAttributes redirectAttributes) throws MessagingException {
         if (principal == null) { //Στην περίπτωση που δεν είναι logged in ο Owner τον επιστέφει στη σελίδα του log in
             return "redirect:/login";
         }
@@ -83,8 +85,12 @@ public class OwnerController {
             }catch(Exception e){
                 throw new RuntimeException("Error saving land");
             }
+
+            emailSenderService.sendMail(owner.getUser().getEmail(), "Your property has been submitted.","Your property has been submitted successfully. \n An email has been sent to the admin for review...");
+            emailSenderService.sendMail(userService.getUser(1).getEmail(),"New property application submission","The user: "+ owner.getUser().getUsername()  +" has submitted a property application. \n Please enter the website to review...");
+
             return "redirect:/Owner/propertySubmitted";
-        }else if(propertyType.equals("Parking")) { //Στην περίπτωση που είναι parking
+        } else if(propertyType.equals("Parking")) { //Στην περίπτωση που είναι parking
             Parking parking = new Parking();
             parking.setLocation(location);
             parking.setEstateName(estateName);
@@ -103,6 +109,10 @@ public class OwnerController {
             }catch(Exception e){
                 throw new RuntimeException("Error saving parking");
             }
+
+            emailSenderService.sendMail(owner.getUser().getEmail(), "Your property has been submitted.","Your property has been submitted successfully. \n An email has been sent to the admin for review...");
+            emailSenderService.sendMail(userService.getUser(1).getEmail(),"New property application submission","The user: "+ owner.getUser().getUsername()  +" has submitted a property application. \n Please enter the website to review...");
+
             return "redirect:/Owner/propertySubmitted";
         } else {//Στην περίπτωση που ο τύπος ιδιοκτησίας ΔΕΝ είναι land
             redirectAttributes.addFlashAttribute("estateName", estateName); //Προσθήκη ονόματος ιδιοκτησίας στο redAttributes για redirection
@@ -112,6 +122,7 @@ public class OwnerController {
             redirectAttributes.addFlashAttribute("SqMeters", sqMeters); //Προσθήκη τετραγωνικών μέτρων στο redAttributes για redirection
             redirectAttributes.addFlashAttribute("owner", owner); //Προσθήκη ιδιοκτήτη στο redAttributes για redirection
             redirectAttributes.addFlashAttribute("propertyType", propertyType); //Προσθήκη τύπου ιδιοκτησίας στο redAttributes για redirection
+
             return "redirect:/Owner/propertyFacilities"; //Redirection στη φόρμα για την προσθήκη παροχών
 
         }
@@ -133,7 +144,7 @@ public class OwnerController {
                                      @RequestParam(value = "STORAGE", required = false) Boolean storage,
                                      @RequestParam(value = "ALARM", required = false) Boolean alarm,
                                      @RequestParam(value = "SHAREDEXPENSES", required = false) Boolean sharedExpenses,
-                                     @RequestParam(value = "ENERGYCLASS") String energyclass) {
+                                     @RequestParam(value = "ENERGYCLASS") String energyclass) throws MessagingException {
 
         //Λήψη δεδομένων από το μοντέλο
         String estateName = (String) model.getAttribute("estateName");
@@ -219,6 +230,11 @@ public class OwnerController {
                 throw new RuntimeException("Error saving commercial property");
             }
         }
+
+        assert owner != null;
+        emailSenderService.sendMail(owner.getUser().getEmail(), "Your property has been submitted.","Your property has been submitted successfully. \n An email has been sent to the admin for review...");
+        emailSenderService.sendMail(userService.getUser(1).getEmail(),"New property application submission","The user: "+ owner.getUser().getUsername()  +" has submitted a property application. \n Please enter the website to review...");
+
 
         return "redirect:/Owner/propertySubmitted";
     }
