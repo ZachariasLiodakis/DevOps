@@ -13,15 +13,13 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
 @Service
-public class EmailSenderService {
+public class EmailSenderService {                   // This needs to be a seperate package with the use of NX
     @Autowired
     private JavaMailSender mailSender;
 
     public void sendMail(String to, String subject, String content) throws MessagingException {
         MimeMessage message = mailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message, true);
-
-//        helper.addAttachment("akinita.png", new File("/images/akinita.png"));       // File(fileNamePath)
 
         helper.setTo("bramis04chris@gmail.com");             // change meta se 'to'
         helper.setSubject(subject);
