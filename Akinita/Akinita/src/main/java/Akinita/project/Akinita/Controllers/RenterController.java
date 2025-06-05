@@ -5,6 +5,7 @@ import Akinita.project.Akinita.Entities.Actors.Renter;
 import Akinita.project.Akinita.Entities.Actors.User;
 import Akinita.project.Akinita.Entities.Properties.Property;
 import Akinita.project.Akinita.Services.*;
+import jakarta.mail.MessagingException;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
@@ -29,6 +30,8 @@ public class RenterController {
     private UserService userService;
     @Autowired
     private ApplicationService applicationService;
+    @Autowired
+    private EmailSenderService emailSenderService;
 
     @GetMapping("/rental_application")
     public String RenterRentalApplications(Model model, @RequestParam("property_id") Property property) {
@@ -42,7 +45,7 @@ public class RenterController {
                                   @RequestParam("rentalDuration") int rentalDuration,
                                   @RequestParam("description") String description,
                                   @RequestParam(value = "pets", defaultValue = "false") boolean pets,
-                                  Model model, Principal principal, RedirectAttributes redirectAttributes) {
+                                  Model model, Principal principal, RedirectAttributes redirectAttributes) throws MessagingException {
 
         String email = principal.getName();
         Integer renterId = renterService.findRenterIdByEmail(email);
@@ -77,6 +80,11 @@ public class RenterController {
 
         // Προαιρετικά, προσθέτουμε ένα μήνυμα επιτυχίας για την αναγνώριση της επιτυχίας της αποθήκευσης
         model.addAttribute("message", "Η αίτηση σας καταχωρήθηκε επιτυχώς.");
+
+        emailSenderService.sendMail(renter.getEmail(),"Renter Registration Submission of " + renter.getUsername(),"Your rental application has been submitted and sent by email to the owner!\n" +
+                "Please wait while they review it...");
+        emailSenderService.sendMail(application.getOwner().getEmail(), "The user: "+ renter.getUsername() + " wants to rent your property!",
+                "The user: "+ renter.getUsername() + " wants to rent your property!  ( " + application.getProperty().getEstateName() + " ) \n Please enter to the website to review the application!");    // ideally a link would be provided but it's not needed for now
 
         // Ανακατεύθυνση ή επιστροφή στη σελίδα
         return "redirect:/Renter/applicationSubmitted";  // Ανακατεύθυνση στη σελίδα με τις αιτήσεις
