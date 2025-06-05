@@ -7,10 +7,12 @@ import Akinita.project.Akinita.Entities.Actors.Owner;
 import Akinita.project.Akinita.Entities.Actors.Renter;
 import Akinita.project.Akinita.Entities.Role;
 import Akinita.project.Akinita.Entities.Actors.User;
+import jakarta.mail.MessagingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import Akinita.project.Akinita.Services.EmailSenderService;
 
 @SuppressWarnings("SpringJavaAutowiredFieldsWarningInspection")
 @Controller
@@ -23,6 +25,9 @@ public class UserController {
 
     @Autowired
     private RenterService renterService; //Δήλωση του Renter Service
+
+    @Autowired
+    private EmailSenderService emailSenderService;
 
     @PostMapping("/register") //Μέθοδος για registration
     public String register(@RequestParam("role") String role, Model model) {
@@ -40,7 +45,7 @@ public class UserController {
     }
 
     @PostMapping("/saveUser") //Αποθήκευση καινούργιου χρήστη
-    public String registerUser(@ModelAttribute User user, @RequestParam("role") String role, @RequestParam("firstname") String firstname, @RequestParam("lastname") String lastname, @RequestParam("telephone") String telephone, Model model) {
+    public String registerUser(@ModelAttribute User user, @RequestParam("role") String role, @RequestParam("firstname") String firstname, @RequestParam("lastname") String lastname, @RequestParam("telephone") String telephone, Model model) throws MessagingException {
 
         model.addAttribute("isError",false);
 
@@ -103,6 +108,9 @@ public class UserController {
             }catch (Exception e){
                 throw new RuntimeException("Saving renter failed");
             }
+
+            emailSenderService.sendMail(user.getEmail(),"Renter Registration Submission of " + user.getUsername(),"Your register application has been submitted and sent by email to Admin!\n" +
+                    "Please wait while the admin reviews it...");
 
             return "redirect:/Renter/registrationSubmitted";
         }
