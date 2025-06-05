@@ -305,15 +305,17 @@ public class OwnerController {
     }
 
     @PostMapping("/evaluate_application")
-    public String evaluateApplication(@RequestParam("rentalApplication_id") int applicationId, @RequestParam("decision") String decision ) {
+    public String evaluateApplication(@RequestParam("rentalApplication_id") int applicationId, @RequestParam("decision") String decision ) throws MessagingException {
+
+        RentalApplication r = applicationService.findById(applicationId);
+        int renterId=r.getRenter().getId();
+        Renter renter=renterService.getRenterById(renterId);
 
         if(decision.equals("accept")){
             applicationService.setDateCurrDate(applicationId);
 
-            RentalApplication r = applicationService.findById(applicationId);
             applicationService.setApplicationStatus(applicationId,true);
-            int renterId=r.getRenter().getId();
-            Renter renter=renterService.getRenterById(renterId);
+
             r.getProperty().setVisibility("Occupied");
             r.getProperty().setAvailability(false);
             r.getProperty().setRenter(renter);
@@ -322,9 +324,12 @@ public class OwnerController {
             }catch (Exception e){
                 throw new RuntimeException("Error updating property");
             }
+            emailSenderService.sendMail(renter.getUser().getEmail(),"Your rental application has been accepted!","Congratulations!!\nYou are the proud Renter of the property: " + r.getProperty().getEstateName());
         }else{
 
             applicationService.setApplicationStatus(applicationId,false);
+            emailSenderService.sendMail(renter.getUser().getEmail(), "Your rental application has been denied...", "We are sorry to announce that your rental application for the property: " + r.getProperty().getEstateName()+ " has been denied..." +
+                    "\n Keep looking! Don't worry, life is full of challenges!");
         }
         return "redirect:/Owner/manageApplications";
     }
