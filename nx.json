@@ -1,0 +1,17 @@
+{
+  "installation": {
+    "version": "21.2.0"
+  },
+  "npmScope": "devops",
+  "affected": {
+    "defaultBase": "main"
+  },
+  "tasksRunnerOptions": {
+    "default": {
+      "runner": "@nx/workspace/tasks-runners/default",
+      "options": {
+        "cacheableOperations": ["build", "test", "lint"]
+      }
+    }
+  }
+}
