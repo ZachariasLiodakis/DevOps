@@ -21,7 +21,7 @@ public class EmailSenderService {                   // This needs to be a sepera
         MimeMessage message = mailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message, true);
 
-        helper.setTo("bramis04chris@gmail.com");             // change meta se 'to'
+        helper.setTo("it2022071@hua.gr");             // change meta se 'to'
         helper.setSubject(subject);
 
         try(var inputStream = EmailSenderService.class.getResourceAsStream("/templates/Email.html")){
