@@ -1,9 +1,13 @@
 package Akinita.project.Akinita.Controllers;
 
+import Akinita.project.Akinita.Entities.Actors.User;
 import Akinita.project.Akinita.Entities.Enums.EnergyClass;
 import Akinita.project.Akinita.Entities.Enums.Facilities;
 import Akinita.project.Akinita.Entities.Properties.Property;
+import Akinita.project.Akinita.Services.EmailSenderService;
 import Akinita.project.Akinita.Services.PropertyService;
+import Akinita.project.Akinita.Services.UserService;
+import jakarta.mail.MessagingException;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -27,6 +31,11 @@ import static Akinita.project.Akinita.Entities.Enums.Facilities.*;
 public class PropertyController {
     @Autowired
     PropertyService propertyService;
+
+    @Autowired
+    EmailSenderService emailSenderService;
+    @Autowired
+    private UserService userService;
 
     @GetMapping("/searchProperties")
     public String searchProperties(@RequestParam(name = "location", required = false) String location,
@@ -141,9 +150,14 @@ public class PropertyController {
     @Secured("ROLE_ADMIN")
     @Transactional
     @GetMapping("/AcceptListings/{property_id}") //Μέθοδος αποδοχής ιδιοκτησίας από τον admin
-    public String updateProperties(@ModelAttribute("properties") Property property,@PathVariable int property_id){
+    public String updateProperties(@ModelAttribute("properties") Property property,@PathVariable int property_id) throws MessagingException {
         Property the_property= propertyService.getPropertyById(property_id);
+        User owner = userService.getUser(the_property.getOwnerId());
         the_property.setVisibility("Visible"); //Αλλαγή visibility
+
+        emailSenderService.sendMail(owner.getEmail(), "Your property has been accepted!","Your property: " + the_property.getEstateName() +  " has been successfully reviewed and accepted by the admin.");
+
+
         try {
             propertyService.updateProperty(the_property); //Αποθήκευση αλλαγών στη Βάση Δεδομένων
         }catch (Exception e){
