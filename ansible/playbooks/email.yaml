@@ -65,7 +65,7 @@
         - name: "Build the Spring application"
           command: "./mvnw package -Dmaven.test.skip"
           args:
-            chdir: "{{ appdir }}/Akinita/Akinita"
+            chdir: "{{ appdir }}/EmailService"
 
     - name: copy spring email service file
       template:
