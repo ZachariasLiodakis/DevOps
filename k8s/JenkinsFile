@@ -6,12 +6,6 @@ pipeline{
         KUBE_CONFIG = credentials('kubeconfig-creds')
     }
 
-    parameters {
-        booleanParam(name: 'INSTALL_POSTGRES', defaultValue: true, description: 'Install PostgreSQL')
-        booleanParam(name: 'INSTALL_SPRING', defaultValue: true, description: 'Install Spring Boot app')
-        booleanParam(name: 'INSTALL_EMAIL', defaultValue: true, description: 'Install EmailService')
-    }
-
     stages {
         stage('Checkout') {
             steps { git url: '...', credentialsId: 'git-creds' }
@@ -20,9 +14,9 @@ pipeline{
         stage('Deploy to K8s via Ansible') {
             steps {
                 ansiblePlaybook(
-                    playbook: 'ansible/deploy-k8s.yaml',
-                    inventory: 'ansible/hosts.yaml',
-                    extras: "-e kubeconfig=${KUBE_CONFIG}"      na dw auto 
+                    playbook: 'ansible/playbooks/deploy-k8s.yaml',
+                    inventory: 'ansible/playbooks/hosts.yaml',
+                    extras: "-e kubeconfig=${KUBE_CONFIG}"
                 )
             }
         }
