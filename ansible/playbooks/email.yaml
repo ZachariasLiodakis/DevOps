@@ -75,13 +75,13 @@
 
     - name: reload spring service
       service:
-        name: spring
+        name: email
         state: restarted
       become: yes
 
     - name: ensure spring service started
       service:
-        name: spring
+        name: email
         state: started
         enabled: yes
       become: yes
