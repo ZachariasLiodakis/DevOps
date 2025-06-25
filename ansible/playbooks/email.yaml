@@ -48,11 +48,11 @@
             regexp: '^distributionSha'
             replace: "distributionSha512Sum={{ sha512_checksum.stdout }}"
 
-    - name: Clean up the temporary file
-      file:
-        path: /tmp/maven_sha512.txt
-        state: absent
-      when: sha512_checksum is defined
+        - name: Clean up the temporary file
+          file:
+            path: /tmp/maven_sha512.txt
+            state: absent
+          when: sha512_checksum is defined
 
 
       always:
