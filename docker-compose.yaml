@@ -14,8 +14,8 @@ services:
       retries: 3
     volumes:
       - 'akinitadb:/var/lib/postgresql/data/'
-  spring:
-    image: sp
+  akinita:
+    image: akinita
     build:
       context: ./Akinita
       dockerfile: Dockerfile
