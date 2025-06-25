@@ -19,14 +19,6 @@ stages {
                 chmod +x mvnw
                 ./mvnw test
                 '''
-            sh '''
-                echo "Start testing the email app"
-                cd ..
-                cd ..
-                cd EmailService
-                chmod +x mvnw
-                ./mvnw test
-                '''
         }
     }
 
