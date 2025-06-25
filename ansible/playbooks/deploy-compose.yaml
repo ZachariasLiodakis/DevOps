@@ -53,13 +53,13 @@
     
     - name: reload docker service
       service:
-        name: spring
+        name: docker-compose-Akinita
         state: restarted
       become: yes
 
     - name: ensure docker service started
       service:
-        name: docker-compose-Akinita.service
+        name: docker-compose-Akinita
         state: started
         enabled: yes
       become: yes
