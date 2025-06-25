@@ -34,6 +34,17 @@ services:
       timeout: 60s
       retries: 3
 
-
+  email:
+    image: email
+    build:
+      context: ./EmailService
+      dockerfile: Dockerfile
+    ports:
+      - "8081:8081"
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8081/actuator/health" ]
+      interval: 30s
+      timeout: 60s
+      retries: 3
 volumes:
   akinitadb:

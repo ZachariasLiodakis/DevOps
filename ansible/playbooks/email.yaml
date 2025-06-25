@@ -1,0 +1,94 @@
+---
+- hosts: devops-vm
+
+  pre_tasks:
+    - name: Install Java
+      apt:
+        name: openjdk-21-jdk
+        state: present
+        update_cache: yes
+      become: yes
+
+  tasks:
+    - name: "debug appdir"
+      ansible.builtin.debug:
+        msg: "appdir {{ansible_user_dir}}"
+
+    - name: "Build spring email project"
+      block:
+        - name: Ensure mvnw is executable
+          file:
+            path: "{{ appdir }}/EmailService/mvnw"
+            mode: '0755'
+            state: file
+          become: yes
+
+        - name: "Build the Spring Email application"
+          become: yes
+          command: "./mvnw package -Dmaven.test.skip "
+          args:
+            chdir: "{{ appdir }}/EmailService"
+      rescue:
+
+        - name: Fetch the SHA-512 checksum for Maven 3.9.9
+          get_url:
+            url: https://downloads.apache.org/maven/maven-3/3.9.9/binaries/apache-maven-3.9.9-bin.zip.sha512
+            dest: /tmp/maven_sha512.txt
+            validate_certs: yes
+            force: yes
+
+        - name: Read the SHA-512 checksum from the file
+          command: cat /tmp/maven_sha512.txt
+          register: sha512_checksum
+
+        - name: Replace the distributionSha512Sum line in maven-wrapper.properties
+          replace:
+            path: "{{ appdir }}/EmailService/.mvn/wrapper/maven-wrapper.properties"
+            regexp: '^distributionSha'
+            replace: "distributionSha512Sum={{ sha512_checksum.stdout }}"
+
+        - name: Clean up the temporary file
+          file:
+            path: /tmp/maven_sha512.txt
+            state: absent
+          when: sha512_checksum is defined
+
+      always:
+        - name: Make mvnw executable
+          file:
+            path: "{{ appdir }}/EmailService/mvnw"
+            mode: '0755'
+            state: file
+
+        - name: "Build the Spring application"
+          command: "./mvnw package -Dmaven.test.skip"
+          args:
+            chdir: "{{ appdir }}/Akinita/Akinita"
+
+    - name: copy spring email service file
+      template:
+        src: ../files/email.service.j2
+        dest: "/etc/systemd/system/email.service"
+      become: yes
+      become_user: root
+      notify: restart spring
+
+    - name: reload spring service
+      service:
+        name: spring
+        state: restarted
+      become: yes
+
+    - name: ensure spring service started
+      service:
+        name: spring
+        state: started
+        enabled: yes
+      become: yes
+
+  handlers:
+    - name: restart spring
+      service:
+        name: spring
+        state: restarted
+      become: yes

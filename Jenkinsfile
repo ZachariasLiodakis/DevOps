@@ -14,30 +14,47 @@ stages {
     stage('Test') {
         steps {
             sh '''
-                echo "Start testing"
+                echo "Start testing the Akinita app"
                 cd Akinita/Akinita
                 chmod +x mvnw
                 ./mvnw test
-                ''' 
+                '''
+            sh '''
+                echo "Start testing the email app"
+                cd ..
+                cd ..
+                cd EmailService
+                chmod +x mvnw
+                ./mvnw test
+                '''
         }
     }
 
     stage('Docker build and push') {
         steps {
-            sh '''
-                HEAD_COMMIT=$(git rev-parse --short HEAD)
-                TAG=$HEAD_COMMIT-$BUILD_ID
-                docker ps
-                cd Akinita/
-                ls -l Akinita/
-                ls -l Akinita/src/
-                docker build --rm -t $DOCKER_PREFIX:$TAG -t $DOCKER_PREFIX:latest -f Dockerfile .
-            '''
-            sh '''
-                echo $DOCKER_TOKEN | docker login $DOCKER_SERVER -u $DOCKER_USER --password-stdin
-                docker push $DOCKER_PREFIX --all-tags
-            '''
+            script {
+                def headCommit = sh(script: "git rev-parse --short HEAD", returnStdout: true).trim()
+                def tag = "${headCommit}-${env.BUILD_ID}"
+
+                // === Build Akinita App ===
+                sh """
+                    docker build --rm -t $DOCKER_PREFIX/akinita:$tag -t $DOCKER_PREFIX/akinita:latest -f Akinita/Dockerfile Akinita/
+                """
+
+                // === Build EmailService App ===
+                sh """
+                    docker build --rm -t $DOCKER_PREFIX/emailservice:$tag -t $DOCKER_PREFIX/emailservice:latest -f EmailService/Dockerfile EmailService/
+                """
+
+                // === Docker Login & Push All ===
+                sh """
+                    echo $DOCKER_TOKEN | docker login $DOCKER_SERVER -u $DOCKER_USER --password-stdin
+                    docker push $DOCKER_PREFIX/akinita --all-tags
+                    docker push $DOCKER_PREFIX/emailservice --all-tags
+                """
+            }
         }
     }
+
 }
 }
