@@ -1,34 +1,34 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name:  spring-deployment
+  name:  email-deployment
   namespace: default
   labels:
-    app: spring
+    app: email
 spec:
   selector:
     matchLabels:
-      app: spring
+      app: email
   replicas: 1
   template:
     metadata:
       labels:
-        app: spring
+        app: email
     spec:
       containers:
-      - name:  spring
-        image: ghcr.io/zachariasliodakis/devops/akinita:latest
+      - name:  email
+        image: ghcr.io/zachariasliodakis/devops/emailservice:latest
         livenessProbe:
           httpGet:
             path: "/actuator/health/liveness"
-            port: 8080
+            port: 8081
           failureThreshold: 20
           periodSeconds: 10
           initialDelaySeconds: 30
         readinessProbe:
             httpGet:
               path: "/actuator/health/readiness"
-              port: 8080
+              port: 8081
             failureThreshold: 10
             periodSeconds: 10
             initialDelaySeconds: 30
@@ -47,7 +47,7 @@ spec:
         - name: SPRING_DATASOURCE_PASSWORD
           value: pass123
         ports:
-        - containerPort:  8080
+        - containerPort:  8081
           name:  spring
       imagePullSecrets:
       - name: registry-credentials

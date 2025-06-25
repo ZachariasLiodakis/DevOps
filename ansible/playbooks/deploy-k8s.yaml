@@ -35,7 +35,10 @@
 
     - name: Apply Email Deployment
       kubernetes.core.k8s:
-        src: ../kapou mesa sto project/Postgres/email-deployment.yaml
+        src: ../k8s/Email/email-deployment.yaml
         state: present
 
-
+    - name: Apply Email Service
+      kubernetes.core.k8s:
+        src: ../k8s/Email/email-service.yaml
+        state: present
