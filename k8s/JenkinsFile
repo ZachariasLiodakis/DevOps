@@ -16,22 +16,13 @@ pipeline{
         stage('Checkout') {
             steps { git url: '...', credentialsId: 'git-creds' }
         }
-        
-        stage('Install Needed Components'){
-            steps{
-                ansiblePlaybook(
-                    playbook: apoluto path sto project??
-                )
-            }
-        }
-
 
         stage('Deploy to K8s via Ansible') {
             steps {
                 ansiblePlaybook(
                     playbook: 'ansible/deploy-k8s.yaml',
                     inventory: 'ansible/hosts.yaml',
-                    extras: "-e kubeconfig=${KUBE_CONFIG}"
+                    extras: "-e kubeconfig=${KUBE_CONFIG}"      na dw auto 
                 )
             }
         }
