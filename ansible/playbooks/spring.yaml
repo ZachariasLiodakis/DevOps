@@ -71,20 +71,21 @@
           - "{{app.env | dict2items}}"
 
       
-      - name: "Set correct permissions"
-        become: yes
-        ansible.builtin.file:
-          path: "{{ appdir }}/Akinita/Akinita"
-          owner: "azureuser"
-          group: "azureuser"
-          mode: "0755"
-          recurse: yes
+      - name: "Build spring project"
+        block:
+        - name: Ensure mvnw is executable
+          file:
+            path: "{{ appdir }}/Akinita/Akinita/mvnw"
+            mode: '0755'
+            state: file
+          become: yes
 
-      - name: "Build the Spring application"
-        command: "./mvnw package -Dmaven.test.skip"
-        args:
-          chdir: "{{ appdir }}/Akinita/Akinita"
-          
+        - name: "Build the Spring application"
+          become: yes
+          command: "./mvnw package -Dmaven.test.skip "
+          args:
+              chdir: "{{ appdir }}/Akinita/Akinita"
+
         rescue:
 
         - name: Fetch the SHA-512 checksum for Maven 3.9.9
