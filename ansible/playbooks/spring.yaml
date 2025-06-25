@@ -80,12 +80,6 @@
             state: file
           become: yes
 
-        - name: "Build the Spring application"
-          become: yes
-          command: "./mvnw package -Dmaven.test.skip "
-          args:
-              chdir: "{{ appdir }}/Akinita/Akinita"
-
         rescue:
 
         - name: Fetch the SHA-512 checksum for Maven 3.9.9
