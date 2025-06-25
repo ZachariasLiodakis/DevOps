@@ -27,7 +27,6 @@
           command: "./mvnw package -Dmaven.test.skip "
           args:
             chdir: "{{ appdir }}/EmailService"
-      rescue:
 
       always:
         - name: Make mvnw executable
