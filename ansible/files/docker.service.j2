@@ -1,0 +1,17 @@
+[Unit]
+Description=Docker Compose for Akinita
+Requires=docker.service
+After=docker.service network.target
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+User={{ app_user }}
+Group={{ app_group }}
+WorkingDirectory={{ working_dir }}
+
+ExecStart=/usr/bin/docker compose -f {{ docker_compose_file }} up -d
+ExecStop=/usr/bin/docker compose -f {{ docker_compose_file }} down
+
+[Install]
+WantedBy=multi-user.target
