@@ -9,6 +9,13 @@
         update_cache: yes
       become: yes
 
+    - name: Install Maven
+      apt:
+        name: maven
+        state: present
+        update_cache: yes
+      become: yes
+
   tasks:
     - name: "debug appdir"
       ansible.builtin.debug:
@@ -62,8 +69,8 @@
             mode: '0755'
             state: file
 
-        - name: "Build the Spring application"
-          command: "./mvnw package -Dmaven.test.skip"
+        - name: "Build the Spring email application"
+          command: "mvn package -Dmaven.test.skip"
           args:
             chdir: "{{ appdir }}/EmailService"
 
