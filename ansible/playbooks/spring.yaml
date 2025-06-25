@@ -81,7 +81,6 @@
           become: yes
 
         - name: "Build the Spring application"
-          become: yes
           command: "./mvnw package -Dmaven.test.skip "
           args:
               chdir: "{{ appdir }}/Akinita/Akinita"
