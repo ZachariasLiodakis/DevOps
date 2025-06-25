@@ -42,6 +42,15 @@
       login_unix_socket: /var/run/postgresql
     tags: [db]
 
+  - name: Ensure md5 authentication for local connections
+    lineinfile:
+      path: /etc/postgresql/16/main/pg_hba.conf
+      regexp: '^local\s+all\s+all\s+'
+      line: 'local   all             all                                     md5'
+      backrefs: yes
+    notify: restart postgres
+    become: yes
+
   - name: Install Java
     apt:
         name: openjdk-21-jdk
