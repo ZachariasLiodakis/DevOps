@@ -10,8 +10,8 @@ User={{ appuser }}
 Group={{ appgroup }}
 WorkingDirectory={{service.workingdir}}
 
-ExecStart=/usr/bin/docker compose -f {{ docker_compose_file }} up -d
-ExecStop=/usr/bin/docker compose -f {{ docker_compose_file }} down
+ExecStart=/usr/bin/docker compose -f {{ service.docker_compose_file }} up -d
+ExecStop=/usr/bin/docker compose -f {{ service.docker_compose_file }} down
 
 [Install]
 WantedBy=multi-user.target
