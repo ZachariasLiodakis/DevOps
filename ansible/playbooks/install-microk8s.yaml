@@ -1,0 +1,42 @@
+---
+- name: Install MicroK8s and enable essential add-ons
+  hosts: all
+  become: yes
+  tasks:
+    - name: Install snapd
+      apt:
+        name: snapd
+        state: present
+        update_cache: yes
+
+    - name: Install MicroK8s
+      snap:
+        name: microk8s
+        state: present
+        classic: yes
+
+    - name: Add user to microk8s group
+      user:
+        name: "{{ ansible_user }}"
+        groups: microk8s
+        append: yes
+
+    - name: Enable MicroK8s add-ons
+      shell: |
+        microk8s enable dns ingress storage
+      args:
+        executable: /bin/bash
+
+    - name: Wait for MicroK8s to be ready
+      shell: |
+        microk8s status --wait-ready
+      args:
+        executable: /bin/bash
+
+    - name: Configure kubeconfig for user
+      shell: |
+        microk8s config > /home/{{ ansible_user }}/.kube/config
+      args:
+        executable: /bin/bash
+      become: yes
+      become_user: "{{ ansible_user }}"
