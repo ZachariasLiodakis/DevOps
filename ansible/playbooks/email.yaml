@@ -16,6 +16,7 @@
 
     - name: "Build spring email project"
       block:
+
         - name: Ensure mvnw is executable
           file:
             path: "{{ appdir }}/EmailService/mvnw"
@@ -24,11 +25,11 @@
           become: yes
 
         - name: "Build the Spring Email application"
-          command: "./mvnw package -Dmaven.test.skip "
+          command: "./mvnw package -Dmaven.test.skip"
           args:
             chdir: "{{ appdir }}/EmailService"
-      
-          rescue:
+
+      rescue:
 
         - name: Fetch the SHA-512 checksum for Maven 3.9.9
           get_url:
@@ -46,12 +47,13 @@
             path: "{{ appdir }}/Akinita/Akinita/.mvn/wrapper/maven-wrapper.properties"
             regexp: '^distributionSha'
             replace: "distributionSha512Sum={{ sha512_checksum.stdout }}"
-        
-        - name: Clean up the temporary file
-          file:
-            path: /tmp/maven_sha512.txt
-            state: absent
-          when: sha512_checksum is defined
+
+    - name: Clean up the temporary file
+      file:
+        path: /tmp/maven_sha512.txt
+        state: absent
+      when: sha512_checksum is defined
+
 
       always:
         - name: Make mvnw executable
