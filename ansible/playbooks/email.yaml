@@ -73,7 +73,7 @@
         dest: "/etc/systemd/system/email.service"
       become: yes
       become_user: root
-      notify: restart spring
+      notify: restart email
 
     - name: reload spring service
       service:
@@ -89,8 +89,8 @@
       become: yes
 
   handlers:
-    - name: restart spring
+    - name: restart email
       service:
-        name: spring
+        name: email
         state: restarted
       become: yes
