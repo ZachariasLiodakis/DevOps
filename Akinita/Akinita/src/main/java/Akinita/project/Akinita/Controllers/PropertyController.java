@@ -4,7 +4,7 @@ import Akinita.project.Akinita.Entities.Actors.User;
 import Akinita.project.Akinita.Entities.Enums.EnergyClass;
 import Akinita.project.Akinita.Entities.Enums.Facilities;
 import Akinita.project.Akinita.Entities.Properties.Property;
-import Akinita.project.Akinita.Services.EmailSenderService;
+import Akinita.project.Akinita.Services.EmailClientService;
 import Akinita.project.Akinita.Services.PropertyService;
 import Akinita.project.Akinita.Services.UserService;
 import jakarta.mail.MessagingException;
@@ -31,9 +31,8 @@ import static Akinita.project.Akinita.Entities.Enums.Facilities.*;
 public class PropertyController {
     @Autowired
     PropertyService propertyService;
-
     @Autowired
-    EmailSenderService emailSenderService;
+    EmailClientService emailClientService;
     @Autowired
     private UserService userService;
 
@@ -155,7 +154,7 @@ public class PropertyController {
         User owner = userService.getUser(the_property.getOwnerId());
         the_property.setVisibility("Visible"); //Αλλαγή visibility
 
-        emailSenderService.sendMail(owner.getEmail(), "Your property has been accepted!","Your property: " + the_property.getEstateName() +  " has been successfully reviewed and accepted by the admin.");
+        emailClientService.sendEmail(owner.getEmail(), "Your property has been accepted!","Your property: " + the_property.getEstateName() +  " has been successfully reviewed and accepted by the admin.");
 
 
         try {

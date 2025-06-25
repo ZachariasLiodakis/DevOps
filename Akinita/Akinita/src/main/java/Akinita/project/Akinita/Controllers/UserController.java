@@ -1,8 +1,6 @@
 package Akinita.project.Akinita.Controllers;
 
-import Akinita.project.Akinita.Services.OwnerService;
-import Akinita.project.Akinita.Services.RenterService;
-import Akinita.project.Akinita.Services.UserService;
+import Akinita.project.Akinita.Services.*;
 import Akinita.project.Akinita.Entities.Actors.Owner;
 import Akinita.project.Akinita.Entities.Actors.Renter;
 import Akinita.project.Akinita.Entities.Role;
@@ -12,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import Akinita.project.Akinita.Services.EmailSenderService;
 
 @SuppressWarnings("SpringJavaAutowiredFieldsWarningInspection")
 @Controller
@@ -27,7 +24,7 @@ public class UserController {
     private RenterService renterService; //Δήλωση του Renter Service
 
     @Autowired
-    private EmailSenderService emailSenderService;
+    private EmailClientService emailClientService;
 
     @PostMapping("/register") //Μέθοδος για registration
     public String register(@RequestParam("role") String role, Model model) {
@@ -109,9 +106,9 @@ public class UserController {
                 throw new RuntimeException("Saving renter failed");
             }
 
-            emailSenderService.sendMail(user.getEmail(),"Renter Registration Submission of " + user.getUsername(),"Your register application has been submitted and sent by email to Admin!\n" +
+            emailClientService.sendEmail(user.getEmail(),"Renter Registration Submission of " + user.getUsername(),"Your register application has been submitted and sent by email to Admin!\n" +
                     "Please wait while the admin reviews it...");
-            emailSenderService.sendMail(userService.getUser(1).getEmail(),"Renter Registration Submission of " + user.getUsername(),"The user " + user.getUsername() + " registered an application for a renter account, please enter to review it");      // ideally it would provide a link but for now it's not needed
+            emailClientService.sendEmail(userService.getUser(1).getEmail(),"Renter Registration Submission of " + user.getUsername(),"The user " + user.getUsername() + " registered an application for a renter account, please enter to review it");      // ideally it would provide a link but for now it's not needed
 
             return "redirect:/Renter/registrationSubmitted";
         }

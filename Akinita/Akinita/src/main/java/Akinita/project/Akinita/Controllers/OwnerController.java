@@ -34,9 +34,9 @@ public class OwnerController {
     @Autowired
     private RenterService renterService;
     @Autowired
-    private EmailSenderService emailSenderService;
-    @Autowired
     private UserService userService;
+    @Autowired
+    private EmailClientService emailClientService;
 
     @GetMapping("/submitProperty") //Μέθοδος επιστροφής φόρμας για εισαγωγή γενικών πληροφοριών ιδιοκτησίας
     public String submitProperty() {
@@ -86,8 +86,18 @@ public class OwnerController {
                 throw new RuntimeException("Error saving land");
             }
 
-            emailSenderService.sendMail(owner.getUser().getEmail(), "Your property has been submitted.","Your property has been submitted successfully. \n An email has been sent to the admin for review...");
-            emailSenderService.sendMail(userService.getUser(1).getEmail(),"New property application submission","The user: "+ owner.getUser().getUsername()  +" has submitted a property application. \n Please enter the website to review...");
+            emailClientService.sendEmail(
+                    owner.getUser().getEmail(),
+                    "Your property has been submitted.",
+                    "Your property has been submitted successfully. \n An email has been sent to the admin for review..."
+            );
+
+            emailClientService.sendEmail(
+                    userService.getUser(1).getEmail(),
+                    "New property application submission",
+                    "The user: " + owner.getUser().getUsername() + " has submitted a property application. \n Please enter the website to review..."
+            );
+
 
             return "redirect:/Owner/propertySubmitted";
         } else if(propertyType.equals("Parking")) { //Στην περίπτωση που είναι parking
@@ -110,8 +120,17 @@ public class OwnerController {
                 throw new RuntimeException("Error saving parking");
             }
 
-            emailSenderService.sendMail(owner.getUser().getEmail(), "Your property has been submitted.","Your property has been submitted successfully. \n An email has been sent to the admin for review...");
-            emailSenderService.sendMail(userService.getUser(1).getEmail(),"New property application submission","The user: "+ owner.getUser().getUsername()  +" has submitted a property application. \n Please enter the website to review...");
+            emailClientService.sendEmail(
+                    owner.getUser().getEmail(),
+                    "Your property has been submitted.",
+                    "Your property has been submitted successfully.\nAn email has been sent to the admin for review..."
+            );
+
+            emailClientService.sendEmail(
+                    userService.getUser(1).getEmail(),
+                    "New property application submission",
+                    "The user: " + owner.getUser().getUsername() + " has submitted a property application.\nPlease enter the website to review..."
+            );
 
             return "redirect:/Owner/propertySubmitted";
         } else {//Στην περίπτωση που ο τύπος ιδιοκτησίας ΔΕΝ είναι land
@@ -232,8 +251,18 @@ public class OwnerController {
         }
 
         assert owner != null;
-        emailSenderService.sendMail(owner.getUser().getEmail(), "Your property has been submitted.","Your property has been submitted successfully. \n An email has been sent to the admin for review...");
-        emailSenderService.sendMail(userService.getUser(1).getEmail(),"New property application submission","The user: "+ owner.getUser().getUsername()  +" has submitted a property application. \n Please enter the website to review...");
+        emailClientService.sendEmail(
+                owner.getUser().getEmail(),
+                "Your property has been submitted.",
+                "Your property has been submitted successfully.\nAn email has been sent to the admin for review..."
+        );
+
+        emailClientService.sendEmail(
+                userService.getUser(1).getEmail(),
+                "New property application submission",
+                "The user: " + owner.getUser().getUsername() + " has submitted a property application.\nPlease enter the website to review..."
+        );
+
 
 
         return "redirect:/Owner/propertySubmitted";
@@ -324,11 +353,11 @@ public class OwnerController {
             }catch (Exception e){
                 throw new RuntimeException("Error updating property");
             }
-            emailSenderService.sendMail(renter.getUser().getEmail(),"Your rental application has been accepted!","Congratulations!!\nYou are the proud Renter of the property: " + r.getProperty().getEstateName());
+            emailClientService.sendEmail(renter.getUser().getEmail(),"Your rental application has been accepted!","Congratulations!!\nYou are the proud Renter of the property: " + r.getProperty().getEstateName());
         }else{
 
             applicationService.setApplicationStatus(applicationId,false);
-            emailSenderService.sendMail(renter.getUser().getEmail(), "Your rental application has been denied...", "We are sorry to announce that your rental application for the property: " + r.getProperty().getEstateName()+ " has been denied..." +
+            emailClientService.sendEmail(renter.getUser().getEmail(), "Your rental application has been denied...", "We are sorry to announce that your rental application for the property: " + r.getProperty().getEstateName()+ " has been denied..." +
                     "\n Keep looking! Don't worry, life is full of challenges!");
         }
         return "redirect:/Owner/manageApplications";

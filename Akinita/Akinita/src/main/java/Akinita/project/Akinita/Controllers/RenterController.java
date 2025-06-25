@@ -31,7 +31,7 @@ public class RenterController {
     @Autowired
     private ApplicationService applicationService;
     @Autowired
-    private EmailSenderService emailSenderService;
+    private EmailClientService emailClientService;
 
     @GetMapping("/rental_application")
     public String RenterRentalApplications(Model model, @RequestParam("property_id") Property property) {
@@ -81,9 +81,9 @@ public class RenterController {
         // Προαιρετικά, προσθέτουμε ένα μήνυμα επιτυχίας για την αναγνώριση της επιτυχίας της αποθήκευσης
         model.addAttribute("message", "Η αίτηση σας καταχωρήθηκε επιτυχώς.");
 
-        emailSenderService.sendMail(renter.getEmail(),"Renter Registration Submission of " + renter.getUsername(),"Your rental application has been submitted and sent by email to the owner!\n" +
+        emailClientService.sendEmail(renter.getEmail(),"Renter Registration Submission of " + renter.getUsername(),"Your rental application has been submitted and sent by email to the owner!\n" +
                 "Please wait while they review it...");
-        emailSenderService.sendMail(application.getOwner().getEmail(), "The user: "+ renter.getUsername() + " wants to rent your property!",
+        emailClientService.sendEmail(application.getOwner().getEmail(), "The user: "+ renter.getUsername() + " wants to rent your property!",
                 "The user: "+ renter.getUsername() + " wants to rent your property!  ( " + application.getProperty().getEstateName() + " ) \n Please enter to the website to review the application!");    // ideally a link would be provided but it's not needed for now
 
         // Ανακατεύθυνση ή επιστροφή στη σελίδα
@@ -119,7 +119,7 @@ public class RenterController {
             throw new RuntimeException("Could not update renter");
         }
 
-        emailSenderService.sendMail(the_renter.getUser().getEmail(), "Your renter account has been accepted!","Your renter account has been successfully reviewed and accepted by the admin. \n You can now freely explore what our website has to offer!");
+        emailClientService.sendEmail(the_renter.getUser().getEmail(), "Your renter account has been accepted!","Your renter account has been successfully reviewed and accepted by the admin. \n You can now freely explore what our website has to offer!");
         return "redirect:/Renter/AcceptRenters";
     }
 
