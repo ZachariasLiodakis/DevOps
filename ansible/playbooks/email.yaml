@@ -32,7 +32,7 @@
           become: yes
 
         - name: "Build the Spring Email application"
-          command: "./mvnw package -Dmaven.test.skip"
+          command: "mvn package -Dmaven.test.skip"
           args:
             chdir: "{{ appdir }}/EmailService"
 
