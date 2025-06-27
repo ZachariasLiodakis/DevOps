@@ -53,6 +53,16 @@ pipeline {
       }
     }
 
+    stage('Debug Paths') {
+        steps {
+        sh '''
+            pwd
+            ls -l ../k8s/Akinita-Spring/
+            ls -l ../../k8s/Akinita-Spring/
+            ls -l ../k8s/Postgres/
+        '''
+    }
+
     stage('Deploy to K8s via Ansible') {
       steps {
         script {
