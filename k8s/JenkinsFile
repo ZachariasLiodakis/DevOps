@@ -50,7 +50,7 @@ pipeline {
             # reload groups (προαιρετικά)
             newgrp microk8s
     
-            microk8s enable dns ingress storage
+            sudo microk8s enable dns ingress storage
 
             touch /var/tmp/microk8s-setup-done
           else
