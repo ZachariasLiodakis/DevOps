@@ -31,28 +31,6 @@ pipeline {
             echo "✅ microk8s already installed"
           fi
 
-          # Πρώτο setup αν δεν έχει ξαναγίνει
-          if [ ! -f /var/tmp/microk8s-setup-done ]; then
-            echo "➡ First-time MicroK8s setup"
-    
-            sudo ufw allow in on eth0
-            sudo ufw allow out on eth0
-            sudo ufw default allow routed
-    
-            sudo usermod -a -G microk8s $USER
-    
-            mkdir -p ~/.kube
-            sudo chown -R $USER ~/.kube
-
-            echo "$KUBE_CONFIG" > ~/.kube/config
-    
-            sudo microk8s enable dns ingress storage
-
-            touch /var/tmp/microk8s-setup-done
-          else
-            echo "✅ MicroK8s first-time setup already done, skipping"
-          fi
-
           echo "🔍 Checking for ansible-playbook..."
           if ! command -v ansible-playbook > /dev/null; then
             echo "➡ ansible-playbook not found, installing ansible..."
@@ -85,39 +63,25 @@ pipeline {
       }
     }
 
-    stage('Debug Info') {
-        steps {
-            sh '''
-            echo "=== User ==="
-            whoami
-            echo "=== Kubectl Path ==="
-            which kubectl || which microk8s.kubectl
-            echo "=== Kubeconfig contents ==="
-            cat ~/.kube/config || echo "No ~/.kube/config"
-            echo "=== Kubectl config view ==="
-            kubectl config view || microk8s.kubectl config view
-            '''
-        }
-    }
-
-
+    stages {
     stage('Deploy to K8s via Ansible') {
       steps {
         script {
-          // Δημιουργία προσωρινού αρχείου kubeconfig
-          writeFile file: '/tmp/kubeconfig', text: "${env.KUBE_CONFIG_CONTENT}"
-
-          // ασφάλεια δικαιωμάτων
+          // Γράφουμε το kubeconfig στο /tmp
+          writeFile file: '/tmp/kubeconfig', text: "${env.KUBE_CONFIG}"
           sh 'chmod 600 /tmp/kubeconfig'
 
-          ansiblePlaybook(
-            playbook: 'ansible/playbooks/deploy-k8s.yaml',
-            inventory: 'ansible/playbooks/hosts.yaml',
-            extras: "-e kubeconfig=/tmp/kubeconfig",
-            colorized: true
-          )
+          // export KUBECONFIG μέσα στο shell context
+          sh '''
+            export KUBECONFIG=/tmp/kubeconfig
+            ansible-playbook \
+              ansible/playbooks/deploy-k8s.yaml \
+              -i ansible/playbooks/hosts.yaml \
+              -e kubeconfig=/tmp/kubeconfig
+          '''
+                }
+            }
         }
-      }
     }
   }
 }
