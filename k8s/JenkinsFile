@@ -4,6 +4,7 @@ pipeline {
   environment {
     ANSIBLE_HOST_KEY_CHECKING = 'False'
     KUBE_CONFIG = credentials('kubeconfig-creds')
+    K8S_VM_IP = credentials('k8s_vm_ip')
   }
 
   stages {
