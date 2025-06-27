@@ -40,7 +40,8 @@ ansible-playbook -i ansible/hosts.yaml ansible/playbooks/deploy-compose.yaml -e 
 ```
 ### 3. Deployment with Jenkins and Kubernetes
 Set up your mainApp-host Vm, installed with snap, microk8s, kubectl
-    Step 1 ( installing microk8s ):
+
+Step 1 ( installing microk8s ):
   ```bash
     sudo snap install microk8s --classic
   ```
