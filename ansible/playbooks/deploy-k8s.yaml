@@ -8,41 +8,41 @@
 
   tasks:
     - name: Apply Spring Deployment
-      shell: k --kubeconfig="{{ kubeconfig }}" apply -f "{{ workspace }}/k8s/Akinita-spring/spring-deployment.yaml"
+      shell: microk8s.kubectl --kubeconfig="{{ kubeconfig }}" apply -f "{{ workspace }}/k8s/Akinita-spring/spring-deployment.yaml"
       environment:
         KUBECONFIG: "{{ kubeconfig }}"
 
     - name: Apply Spring Service
-      shell: k --kubeconfig="{{ kubeconfig }}" apply -f "{{ workspace }}/k8s/Akinita-spring/spring-service.yaml"
+      shell: microk8s.kubectl --kubeconfig="{{ kubeconfig }}" apply -f "{{ workspace }}/k8s/Akinita-spring/spring-service.yaml"
       environment:
         KUBECONFIG: "{{ kubeconfig }}"
 
     - name: Apply Spring Ingress
-      shell: k --kubeconfig="{{ kubeconfig }}" apply -f "{{ workspace }}/k8s/Akinita-spring/spring-ingress.yaml"
+      shell: microk8s.kubectl --kubeconfig="{{ kubeconfig }}" apply -f "{{ workspace }}/k8s/Akinita-spring/spring-ingress.yaml"
       environment:
         KUBECONFIG: "{{ kubeconfig }}"
 
     - name: Apply Postgres Deployment
-      shell: k --kubeconfig="{{ kubeconfig }}" apply -f "{{ workspace }}/k8s/postgres/postgres-deployment.yaml"
+      shell: microk8s.kubectl --kubeconfig="{{ kubeconfig }}" apply -f "{{ workspace }}/k8s/postgres/postgres-deployment.yaml"
       environment:
         KUBECONFIG: "{{ kubeconfig }}"
 
     - name: Apply Postgres Persistent Volume
-      shell: k --kubeconfig="{{ kubeconfig }}" apply -f "{{ workspace }}/k8s/postgres/postgres-pvc.yaml"
+      shell: microk8s.kubectl --kubeconfig="{{ kubeconfig }}" apply -f "{{ workspace }}/k8s/postgres/postgres-pvc.yaml"
       environment:
         KUBECONFIG: "{{ kubeconfig }}"
 
     - name: Apply Postgres Service
-      shell: k --kubeconfig="{{ kubeconfig }}" apply -f "{{ workspace }}/k8s/postgres/postgres-svc.yaml"
+      shell: microk8s.kubectl --kubeconfig="{{ kubeconfig }}" apply -f "{{ workspace }}/k8s/postgres/postgres-svc.yaml"
       environment:
         KUBECONFIG: "{{ kubeconfig }}"
 
     - name: Apply Email Deployment
-      shell: k --kubeconfig="{{ kubeconfig }}" apply -f "{{ workspace }}/k8s/Email/email-deployment.yaml"
+      shell: microk8s.kubectl --kubeconfig="{{ kubeconfig }}" apply -f "{{ workspace }}/k8s/Email/email-deployment.yaml"
       environment:
         KUBECONFIG: "{{ kubeconfig }}"
 
     - name: Apply Email Service
-      shell: k --kubeconfig="{{ kubeconfig }}" apply -f "{{ workspace }}/k8s/Email/email-service.yaml"
+      shell: microk8s.kubectl --kubeconfig="{{ kubeconfig }}" apply -f "{{ workspace }}/k8s/Email/email-service.yaml"
       environment:
         KUBECONFIG: "{{ kubeconfig }}"

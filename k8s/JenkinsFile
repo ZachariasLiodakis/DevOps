@@ -44,9 +44,6 @@ pipeline {
             mkdir -p ~/.kube
             sudo chown -R $USER ~/.kube
     
-            echo "alias k='microk8s.kubectl'" >> ~/.profile
-            echo "alias c=clear" >> ~/.profile
-    
             # reload groups (προαιρετικά)
             newgrp microk8s
     
