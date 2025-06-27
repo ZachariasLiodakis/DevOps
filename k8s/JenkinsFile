@@ -3,9 +3,6 @@ pipeline {
 
   environment {
     ANSIBLE_HOST_KEY_CHECKING = 'False'
-    KUBE_CONFIG = credentials('kubeconfig-creds')
-    K8S_VM_IP = credentials('k8s_vm_ip')
-    WORKSPACE = "${env.WORKSPACE}"
   }
 
   stages {
@@ -13,43 +10,22 @@ pipeline {
       steps {
         sh '''
           set -e
-
-          echo "🔍 Checking for snap..."
+          echo "🔍 Checking prerequisites..."
           if ! command -v snap > /dev/null; then
-            echo "➡ snap not found, installing snapd..."
             sudo apt update
             sudo apt install -y snapd
-          else
-            echo "✅ snap already installed"
           fi
-
-          echo "🔍 Checking for microk8s..."
           if ! snap list microk8s > /dev/null 2>&1; then
-            echo "➡ microk8s not found, installing microk8s..."
             sudo snap install microk8s --classic
-          else
-            echo "✅ microk8s already installed"
           fi
-
-          echo "🔍 Checking for ansible-playbook..."
           if ! command -v ansible-playbook > /dev/null; then
-            echo "➡ ansible-playbook not found, installing ansible..."
             sudo apt update
             sudo apt install -y ansible
-          else
-            echo "✅ ansible-playbook already installed"
           fi
-
-          echo "🔍 Checking for kubectl..."
           if ! command -v kubectl > /dev/null; then
-            echo "➡ kubectl not found, installing kubectl via snap..."
             sudo snap install kubectl --classic
-          else
-            echo "✅ kubectl already installed"
           fi
-
-
-          echo "✅ All prerequisites are now installed!"
+          echo "✅ Prerequisites OK"
         '''
       }
     }
@@ -65,21 +41,16 @@ pipeline {
 
     stage('Deploy to K8s via Ansible') {
       steps {
-        script {
-          // Γράφουμε το kubeconfig στο /tmp
-          writeFile file: '/tmp/kubeconfig', text: "${env.KUBE_CONFIG}"
-          sh 'chmod 600 /tmp/kubeconfig'
-
-          // export KUBECONFIG μέσα στο shell context
+        withCredentials([file(credentialsId: 'kubeconfig-creds', variable: 'KUBECONFIG_FILE')]) {
           sh '''
-            export KUBECONFIG=/tmp/kubeconfig
+            export KUBECONFIG=$KUBECONFIG_FILE
             ansible-playbook \
               ansible/playbooks/deploy-k8s.yaml \
               -i ansible/playbooks/hosts.yaml \
-              -e kubeconfig=/tmp/kubeconfig
+              -e kubeconfig=$KUBECONFIG_FILE
           '''
-                }
-            }
         }
+      }
     }
+  }
 }
