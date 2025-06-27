@@ -65,7 +65,7 @@ ansible-playbook -i ansible/hosts.yaml ansible/playbooks/deploy-compose.yaml -e 
     microk8s.kubectl config view --raw > ~/.kube/config
   ```
   Step 6:
-    \nCopy the config and save it locally on your computer.
+  Copy the config and save it locally on your computer.
     
     
     
