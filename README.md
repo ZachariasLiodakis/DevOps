@@ -20,6 +20,17 @@ This project implements an information system ([Akinita](https://github.com/Zach
 - `Email-service` → Contains the EmailService Project 
 - `k8s` → Contains all the deployments for the different components
 
+## 🎥 Video Demos
+
+### Deployment with Ansible and Jenkins
+  [Ansible + Jenkins](https://youtu.be/jS-u3wXZ59Y)
+
+### Deployment Using Ansible, Docker and Jenkins
+  [Ansible + Docker + Jenkins](https://youtu.be/DldWStTcoOI)
+
+### Deployment using Microk8s, Ansible and Jenkins
+  [Ansible + Microk8s + Jenkins](https://youtu.be/n4xYRxjVICY)
+
 ## 🚀 Startup Instructions
 
 ### 1. Deployment with Ansible on VM
@@ -105,17 +116,6 @@ Step 1 ( installing microk8s ):
 
   Create a pipeline job in Jenkins with this repo, and the jenkinsFile in the directory k8s/JenkinsFile.
   You are ready to Build.
-
-## 🎥 Video Demos
-
-### Deployment with Ansible and Jenkins
-  [Ansible + Jenkins](https://youtu.be/jS-u3wXZ59Y)
-
-### Deployment Using Ansible, Docker and Jenkins
-  [Ansible + Docker + Jenkins](https://youtu.be/DldWStTcoOI)
-
-### Deployment using Microk8s, Ansible and Jenkins
-  [Ansible + Microk8s + Jenkins](https://youtu.be/n4xYRxjVICY)
   
 ## ⚙️ Application Access
 - For accessing the application via VM: http://YOUR_VM_IP:8080
