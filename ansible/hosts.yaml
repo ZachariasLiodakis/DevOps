@@ -12,3 +12,7 @@ azure-hosts:
       ansible_host: "{{ vm_ip }}"
       ansible_user: azureuser
       ansible_ssh_common_args: '-o StrictHostKeyChecking=no'
+    k8s-vm:
+      ansible_host: "{{ k8s_vm_ip }}"
+      ansible_user: azureuser
+      ansible_ssh_common_args: '-o StrictHostKeyChecking=no'
