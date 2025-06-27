@@ -55,12 +55,20 @@ pipeline {
 
     stage('Deploy to K8s via Ansible') {
       steps {
-        ansiblePlaybook(
-          playbook: 'ansible/playbooks/deploy-k8s.yaml',
-          inventory: 'ansible/playbooks/hosts.yaml',
-          extras: "-e kubeconfig=${KUBE_CONFIG}",
-          colorized: true
-        )
+        script {
+          // Δημιουργία προσωρινού αρχείου kubeconfig
+          writeFile file: '/tmp/kubeconfig', text: "${env.KUBE_CONFIG_CONTENT}"
+
+          // export περιβάλλοντος για ansible
+          sh 'chmod 600 /tmp/kubeconfig'  // ασφάλεια δικαιωμάτων
+
+          ansiblePlaybook(
+            playbook: 'ansible/playbooks/deploy-k8s.yaml',
+            inventory: 'ansible/playbooks/hosts.yaml',
+            extras: "-e kubeconfig=/tmp/kubeconfig",
+            colorized: true
+          )
+        }
       }
     }
   }
