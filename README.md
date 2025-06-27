@@ -44,13 +44,11 @@ ansible-playbook -i ansible/hosts.yaml ansible/playbooks/deploy-compose.yaml -e 
     ```bash
     sudo snap install microk8s --classic
     ```
-    
     Step 2 ( allowing routes ):
     ```bash
     sudo ufw allow in on ethh0 && sudo ufw allow out on eth0
     sudo ufw default allow routed    
     ```
-    
     Step 3 ( configuring ./kube dir ):
     ```bash
     sudo usermod -a -G microk8s $USER   ( needs exiting and re-entering the vm )
@@ -58,17 +56,14 @@ ansible-playbook -i ansible/hosts.yaml ansible/playbooks/deploy-compose.yaml -e 
     sudo chown -f -R $USER ~/.kube
     sudo su - $USER
     ```
-    
     Step 4 ( enabling services ):
     ```bash
     microk8s.enable dns storage ingress
     ```
-    
     Step 5 ( setting up the kubeconfig ):
     ```bash
     microk8s.kubectl config view --raw > ~/.kube/config
     ```
-    
     Step 6:
       Copy the config and save it locally on your computer.
     
