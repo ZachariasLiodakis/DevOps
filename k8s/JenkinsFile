@@ -40,6 +40,19 @@ pipeline {
             echo "✅ ansible-playbook already installed"
           fi
 
+          echo "🔍 Checking for kubectl..."
+          if ! command -v kubectl > /dev/null; then
+            echo "➡ kubectl not found, installing kubectl..."
+            sudo apt-get update
+            sudo apt-get install -y apt-transport-https ca-certificates curl
+            curl -fsSL https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
+            echo "deb https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee /etc/apt/sources.list.d/kubernetes.list
+            sudo apt-get update
+            sudo apt-get install -y kubectl
+          else
+            echo "✅ kubectl already installed"
+          fi
+
           echo "✅ All prerequisites are now installed!"
         '''
       }
@@ -60,8 +73,8 @@ pipeline {
           // Δημιουργία προσωρινού αρχείου kubeconfig
           writeFile file: '/tmp/kubeconfig', text: "${env.KUBE_CONFIG_CONTENT}"
 
-          // export περιβάλλοντος για ansible
-          sh 'chmod 600 /tmp/kubeconfig'  // ασφάλεια δικαιωμάτων
+          // ασφάλεια δικαιωμάτων
+          sh 'chmod 600 /tmp/kubeconfig'
 
           ansiblePlaybook(
             playbook: 'ansible/playbooks/deploy-k8s.yaml',
