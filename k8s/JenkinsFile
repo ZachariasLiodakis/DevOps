@@ -85,6 +85,22 @@ pipeline {
       }
     }
 
+    stage('Debug Info') {
+        steps {
+            sh '''
+            echo "=== User ==="
+            whoami
+            echo "=== Kubectl Path ==="
+            which kubectl || which microk8s.kubectl
+            echo "=== Kubeconfig contents ==="
+            cat ~/.kube/config || echo "No ~/.kube/config"
+            echo "=== Kubectl config view ==="
+            kubectl config view || microk8s.kubectl config view
+            '''
+        }
+    }
+
+
     stage('Deploy to K8s via Ansible') {
       steps {
         script {
