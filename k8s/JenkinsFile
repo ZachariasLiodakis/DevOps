@@ -42,16 +42,12 @@ pipeline {
 
           echo "🔍 Checking for kubectl..."
           if ! command -v kubectl > /dev/null; then
-            echo "➡ kubectl not found, installing kubectl..."
-            sudo apt-get update
-            sudo apt-get install -y apt-transport-https ca-certificates curl
-            curl -fsSL https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
-            echo "deb https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee /etc/apt/sources.list.d/kubernetes.list
-            sudo apt-get update
-            sudo apt-get install -y kubectl
+            echo "➡ kubectl not found, installing kubectl via snap..."
+            sudo snap install kubectl --classic
           else
             echo "✅ kubectl already installed"
           fi
+
 
           echo "✅ All prerequisites are now installed!"
         '''
