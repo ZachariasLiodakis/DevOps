@@ -6,52 +6,53 @@
 
   vars:
     kubeconfig: "{{ lookup('env','KUBECONFIG') }}"  
+    workspace: "{{ lookup('env','WORKSPACE') | default('/var/lib/jenkins/workspace/K8S') }}"
 
   tasks:
     - name: Apply Spring Deployment
       kubernetes.core.k8s:
         kubeconfig: "{{ kubeconfig }}"
-        src: ../../k8s/Akinita-Spring/spring-deployment.yaml
+        src: "{{ workspace }}/k8s/Akinita-Spring/spring-deployment.yaml"
         state: present
 
     - name: Apply Spring Service
       kubernetes.core.k8s:
         kubeconfig: "{{ kubeconfig }}"
-        src: ../../k8s/Akinita-Spring/spring-service.yaml
+        src: "{{ workspace }}/k8s/Akinita-Spring/spring-service.yaml"
         state: present
 
     - name: Apply Spring Ingress
       kubernetes.core.k8s:
         kubeconfig: "{{ kubeconfig }}"
-        src: ../../k8s/Akinita-Spring/spring-ingress.yaml
+        src: "{{ workspace }}/k8s/Akinita-Spring/spring-ingress.yaml"
         state: present
 
     - name: Apply Postgres Deployment
       kubernetes.core.k8s:
         kubeconfig: "{{ kubeconfig }}"
-        src: ../../k8s/Postgres/postgres-deployment.yaml
+        src: "{{ workspace }}/k8s/Postgres/postgres-deployment.yaml"
         state: present
 
     - name: Apply Postgres Persistent Volume
       kubernetes.core.k8s:
         kubeconfig: "{{ kubeconfig }}"
-        src: ../../k8s/Postgres/postgres-pvc.yaml
+        src: "{{ workspace }}/k8s/Postgres/postgres-pvc.yaml"
         state: present
 
     - name: Apply Postgres Service
       kubernetes.core.k8s:
         kubeconfig: "{{ kubeconfig }}"
-        src: ../../k8s/Postgres/postgres-svc.yaml
+        src: "{{ workspace }}/k8s/Postgres/postgres-svc.yaml"
         state: present
 
     - name: Apply Email Deployment
       kubernetes.core.k8s:
         kubeconfig: "{{ kubeconfig }}"
-        src: ../../k8s/Email/email-deployment.yaml
+        src: "{{ workspace }}/k8s/Email/email-deployment.yaml"
         state: present
 
     - name: Apply Email Service
       kubernetes.core.k8s:
         kubeconfig: "{{ kubeconfig }}"
-        src: ../../k8s/Email/email-service.yaml
+        src: "{{ workspace }}/k8s/Email/email-service.yaml"
         state: present
