@@ -63,7 +63,6 @@ pipeline {
       }
     }
 
-    stages {
     stage('Deploy to K8s via Ansible') {
       steps {
         script {
