@@ -39,33 +39,33 @@ docker-compose up --build
 ansible-playbook -i ansible/hosts.yaml ansible/playbooks/deploy-compose.yaml -e "vm_ip=YOUR_VM_IP"
 ```
 ### 3. Deployment with Jenkins and Kubernetes
-  ##a. Set up your mainApp-host Vm, installed with snap, microk8s, kubectl
-    #Step 1 ( installing microk8s ):
-    ```bash
+  a. Set up your mainApp-host Vm, installed with snap, microk8s, kubectl
+    Step 1 ( installing microk8s ):
+  ```bash
     sudo snap install microk8s --classic
-    ```
-    #Step 2 ( allowing routes ):
-    ```bash
+  ```
+  Step 2 ( allowing routes ):
+  ```bash
     sudo ufw allow in on ethh0 && sudo ufw allow out on eth0
     sudo ufw default allow routed    
-    ```
-    #Step 3 ( configuring ./kube dir ):
-    ```bash
+  ```
+  Step 3 ( configuring ./kube dir ):
+  ```bash
     sudo usermod -a -G microk8s $USER   ( needs exiting and re-entering the vm )
     mkdir ~/.kube
     sudo chown -f -R $USER ~/.kube
     sudo su - $USER
-    ```
-    #Step 4 ( enabling services ):
-    ```bash
+  ```
+  Step 4 ( enabling services ):
+  ```bash
     microk8s.enable dns storage ingress
-    ```
-   #Step 5 ( setting up the kubeconfig ):
-    ```bash
+  ```
+  Step 5 ( setting up the kubeconfig ):
+  ```bash
     microk8s.kubectl config view --raw > ~/.kube/config
-    ```
-   #Step 6:
-      Copy the config and save it locally on your computer.
+  ```
+  Step 6:
+    Copy the config and save it locally on your computer.
     
     
     
