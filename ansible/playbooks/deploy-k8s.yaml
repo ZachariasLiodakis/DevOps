@@ -12,7 +12,7 @@
     - name: Apply Spring Deployment
       kubernetes.core.k8s:
         kubeconfig: "{{ kubeconfig }}"
-        remote_src: "{{ workspace }}/k8s/Akinita-Spring/spring-deployment.yaml"
+        src: "{{ workspace }}/k8s/Akinita-Spring/spring-deployment.yaml"
         state: present
 
     - name: Apply Spring Service
