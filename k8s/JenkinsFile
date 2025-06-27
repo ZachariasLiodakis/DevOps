@@ -31,6 +31,32 @@ pipeline {
             echo "✅ microk8s already installed"
           fi
 
+          # Πρώτο setup αν δεν έχει ξαναγίνει
+          if [ ! -f /var/tmp/microk8s-setup-done ]; then
+            echo "➡ First-time MicroK8s setup"
+    
+            sudo ufw allow in on eth0
+            sudo ufw allow out on eth0
+            sudo ufw default allow routed
+    
+            sudo usermod -a -G microk8s $USER
+    
+            mkdir -p ~/.kube
+            sudo chown -R $USER ~/.kube
+    
+            echo "alias k='microk8s.kubectl'" >> ~/.profile
+            echo "alias c=clear" >> ~/.profile
+    
+            # reload groups (προαιρετικά)
+            newgrp microk8s
+    
+            microk8s enable dns ingress storage
+
+            touch /var/tmp/microk8s-setup-done
+          else
+            echo "✅ MicroK8s first-time setup already done, skipping"
+          fi
+
           echo "🔍 Checking for ansible-playbook..."
           if ! command -v ansible-playbook > /dev/null; then
             echo "➡ ansible-playbook not found, installing ansible..."
