@@ -8,7 +8,8 @@ pipeline{
 
     stages {
         stage('Checkout') {
-            steps { git url: 'https://github.com/ZachariasLiodakis/DevOps' }
+            steps { git url: 'https://github.com/ZachariasLiodakis/DevOps',
+            branch: 'main' }
         }
 
         stage('Deploy to K8s via Ansible') {
