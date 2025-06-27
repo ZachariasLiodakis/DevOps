@@ -46,6 +46,7 @@ pipeline {
             export KUBECONFIG=$KUBECONFIG_FILE
             ansible-playbook \
               ansible/playbooks/deploy-k8s.yaml \
+              ansible/playbooks/hosts.yaml \ 
               -e kubeconfig=$KUBECONFIG_FILE
           '''
         }
