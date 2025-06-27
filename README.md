@@ -1,6 +1,6 @@
 # DevOps - Distributed Infrastructure Information System
 
-This project implements an information system ([Akinita](https://github.com/ZachariasLiodakis/Akinita))based on microservices using Spring Boot and PostgreSQL, supported by Jenkins, Ansible, Docker and Kubernetes. The architecture is fully automated and can be deployed in a VM, Docker or Kubernetes environment. 
+This project implements an information system ([Akinita](https://github.com/ZachariasLiodakis/Akinita)) based on microservices using Spring Boot and PostgreSQL, supported by Jenkins, Ansible, Docker and Kubernetes. The architecture is fully automated and can be deployed in a VM, Docker or Kubernetes environment. 
 
 ## 🔧 Technologies & Tools
 
