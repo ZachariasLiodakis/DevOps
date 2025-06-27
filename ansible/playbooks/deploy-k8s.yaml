@@ -12,37 +12,37 @@
     - name: Apply Spring Deployment
       kubernetes.core.k8s:
         kubeconfig: "{{ kubeconfig }}"
-        src: "{{ workspace }}/k8s/Akinita-Spring/spring-deployment.yaml"
+        src: "{{ workspace }}/k8s/Akinita-spring/spring-deployment.yaml"
         state: present
 
     - name: Apply Spring Service
       kubernetes.core.k8s:
         kubeconfig: "{{ kubeconfig }}"
-        src: "{{ workspace }}/k8s/Akinita-Spring/spring-service.yaml"
+        src: "{{ workspace }}/k8s/Akinita-spring/spring-service.yaml"
         state: present
 
     - name: Apply Spring Ingress
       kubernetes.core.k8s:
         kubeconfig: "{{ kubeconfig }}"
-        src: "{{ workspace }}/k8s/Akinita-Spring/spring-ingress.yaml"
+        src: "{{ workspace }}/k8s/Akinita-spring/spring-ingress.yaml"
         state: present
 
     - name: Apply Postgres Deployment
       kubernetes.core.k8s:
         kubeconfig: "{{ kubeconfig }}"
-        src: "{{ workspace }}/k8s/Postgres/postgres-deployment.yaml"
+        src: "{{ workspace }}/k8s/postgres/postgres-deployment.yaml"
         state: present
 
     - name: Apply Postgres Persistent Volume
       kubernetes.core.k8s:
         kubeconfig: "{{ kubeconfig }}"
-        src: "{{ workspace }}/k8s/Postgres/postgres-pvc.yaml"
+        src: "{{ workspace }}/k8s/postgres/postgres-pvc.yaml"
         state: present
 
     - name: Apply Postgres Service
       kubernetes.core.k8s:
         kubeconfig: "{{ kubeconfig }}"
-        src: "{{ workspace }}/k8s/Postgres/postgres-svc.yaml"
+        src: "{{ workspace }}/k8s/postgres/postgres-svc.yaml"
         state: present
 
     - name: Apply Email Deployment
