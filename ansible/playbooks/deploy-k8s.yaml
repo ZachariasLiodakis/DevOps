@@ -8,25 +8,25 @@
 
   tasks:
     - name: Apply Spring Deployment
-      shell: sudo microk8s.kubectl apply -f "{{ workspace }}/k8s/Akinita-spring/spring-deployment.yaml"
+      shell:  kubectl apply -f "{{ workspace }}/k8s/Akinita-spring/spring-deployment.yaml"
       
     - name: Apply Spring Service
-      shell: sudo microk8s.kubectl apply -f "{{ workspace }}/k8s/Akinita-spring/spring-service.yaml"
+      shell:  kubectl apply -f "{{ workspace }}/k8s/Akinita-spring/spring-service.yaml"
 
     - name: Apply Spring Ingress
-      shell: sudo microk8s.kubectl  apply -f "{{ workspace }}/k8s/Akinita-spring/spring-ingress.yaml"
+      shell:  kubectl  apply -f "{{ workspace }}/k8s/Akinita-spring/spring-ingress.yaml"
 
     - name: Apply Postgres Deployment
-      shell: sudo microk8s.kubectl apply -f "{{ workspace }}/k8s/postgres/postgres-deployment.yaml"
+      shell:  kubectl apply -f "{{ workspace }}/k8s/postgres/postgres-deployment.yaml"
 
     - name: Apply Postgres Persistent Volume
-      shell: sudo microk8s.kubectl apply -f "{{ workspace }}/k8s/postgres/postgres-pvc.yaml"
+      shell:  kubectl apply -f "{{ workspace }}/k8s/postgres/postgres-pvc.yaml"
 
     - name: Apply Postgres Service
-      shell: sudo microk8s.kubectl apply -f "{{ workspace }}/k8s/postgres/postgres-svc.yaml"
+      shell:  kubectl apply -f "{{ workspace }}/k8s/postgres/postgres-svc.yaml"
 
     - name: Apply Email Deployment
-      shell: sudo microk8s.kubectl apply -f "{{ workspace }}/k8s/Email/email-deployment.yaml"
+      shell:  kubectl apply -f "{{ workspace }}/k8s/Email/email-deployment.yaml"
 
     - name: Apply Email Service
-      shell: sudo microk8s.kubectl apply -f "{{ workspace }}/k8s/Email/email-service.yaml"
+      shell: kubectl apply -f "{{ workspace }}/k8s/Email/email-service.yaml"
