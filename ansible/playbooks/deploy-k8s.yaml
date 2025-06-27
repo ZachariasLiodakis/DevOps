@@ -8,41 +8,25 @@
 
   tasks:
     - name: Apply Spring Deployment
-      shell: sudo microk8s.kubectl --kubeconfig="{{ kubeconfig }}" apply -f "{{ workspace }}/k8s/Akinita-spring/spring-deployment.yaml"
-      environment:
-        KUBECONFIG: "{{ kubeconfig }}"
-
+      shell: sudo microk8s.kubectl apply -f "{{ workspace }}/k8s/Akinita-spring/spring-deployment.yaml"
+      
     - name: Apply Spring Service
-      shell: sudo microk8s.kubectl --kubeconfig="{{ kubeconfig }}" apply -f "{{ workspace }}/k8s/Akinita-spring/spring-service.yaml"
-      environment:
-        KUBECONFIG: "{{ kubeconfig }}"
+      shell: sudo microk8s.kubectl apply -f "{{ workspace }}/k8s/Akinita-spring/spring-service.yaml"
 
     - name: Apply Spring Ingress
-      shell: sudo microk8s.kubectl --kubeconfig="{{ kubeconfig }}" apply -f "{{ workspace }}/k8s/Akinita-spring/spring-ingress.yaml"
-      environment:
-        KUBECONFIG: "{{ kubeconfig }}"
+      shell: sudo microk8s.kubectl  apply -f "{{ workspace }}/k8s/Akinita-spring/spring-ingress.yaml"
 
     - name: Apply Postgres Deployment
-      shell: sudo microk8s.kubectl --kubeconfig="{{ kubeconfig }}" apply -f "{{ workspace }}/k8s/postgres/postgres-deployment.yaml"
-      environment:
-        KUBECONFIG: "{{ kubeconfig }}"
+      shell: sudo microk8s.kubectl apply -f "{{ workspace }}/k8s/postgres/postgres-deployment.yaml"
 
     - name: Apply Postgres Persistent Volume
-      shell: sudo microk8s.kubectl --kubeconfig="{{ kubeconfig }}" apply -f "{{ workspace }}/k8s/postgres/postgres-pvc.yaml"
-      environment:
-        KUBECONFIG: "{{ kubeconfig }}"
+      shell: sudo microk8s.kubectl apply -f "{{ workspace }}/k8s/postgres/postgres-pvc.yaml"
 
     - name: Apply Postgres Service
-      shell: sudo microk8s.kubectl --kubeconfig="{{ kubeconfig }}" apply -f "{{ workspace }}/k8s/postgres/postgres-svc.yaml"
-      environment:
-        KUBECONFIG: "{{ kubeconfig }}"
+      shell: sudo microk8s.kubectl apply -f "{{ workspace }}/k8s/postgres/postgres-svc.yaml"
 
     - name: Apply Email Deployment
-      shell: sudo microk8s.kubectl --kubeconfig="{{ kubeconfig }}" apply -f "{{ workspace }}/k8s/Email/email-deployment.yaml"
-      environment:
-        KUBECONFIG: "{{ kubeconfig }}"
+      shell: sudo microk8s.kubectl apply -f "{{ workspace }}/k8s/Email/email-deployment.yaml"
 
     - name: Apply Email Service
-      shell: sudo microk8s.kubectl --kubeconfig="{{ kubeconfig }}" apply -f "{{ workspace }}/k8s/Email/email-service.yaml"
-      environment:
-        KUBECONFIG: "{{ kubeconfig }}"
+      shell: sudo microk8s.kubectl apply -f "{{ workspace }}/k8s/Email/email-service.yaml"
