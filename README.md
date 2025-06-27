@@ -39,7 +39,7 @@ docker-compose up --build
 ansible-playbook -i ansible/hosts.yaml ansible/playbooks/deploy-compose.yaml -e "vm_ip=YOUR_VM_IP"
 ```
 ### 3. Deployment with Jenkins and Kubernetes
-Set up your mainApp-host Vm, installed with snap, microk8s, kubectl
+`Set up your mainApp-host Vm, installed with snap, microk8s, kubectl`
 
 Step 1 ( installing microk8s ):
   ```bash
@@ -68,11 +68,45 @@ Step 1 ( installing microk8s ):
   Step 6:
   
   Copy the config and save it locally on your computer.
-    
-    
-    
-  b. Install Jenkins on another Vm. ( we suggest using jdk-21 )
-  c. Extract from the mainApp-host the 
+
+  Step 5:
+
+  Edit the kubeconfig file, entering the mainApp-host-Vm's ip on the server block.
+  Delete the line 'certificate-authority-data:".."' under the  " cluster: " field
+  Enter a new line
+  ```bash
+    insecure-skip-tls-verify: true
+  ```
+  Basically ignoring the self signed certificates.
+  
+`Install Jenkins on another Vm`
+
+  Step 1 ( enter the jenkins-Vm and install java ):
+  ```bash
+    sudo apt install fontconfig openjdk-21-jre
+    sudo apt install openjdk-21-jdk
+  ```
+  Step 2 ( install jenkins ):
+  
+  [Jenkins](https://www.jenkins.io/doc/book/installing/linux/)
+  
+  Step 3 ( enable Jenkins ):
+  ```bash
+    sudo systemctl enable jenkins
+  ```
+  Step 4:
+
+  Once Jenkins is configured. Create a credential 'Secret File' with the kubeconfig file saved locally.
+  Name it ```"kubeconfig-creds"```.
+
+  `Create the Pipeline job in Jenkins`
+
+  Final Step:
+
+  Create a pipeline job in Jenkins with this repo, and the jenkinsFile in the directory k8s/JenkinsFile.
+  You are ready to Build.
+
+  
 ## ⚙️ Application Access
 - For accessing the application via VM: http://YOUR_VM_IP:8080
 - For accessing the application locally: http://localhost:8080
