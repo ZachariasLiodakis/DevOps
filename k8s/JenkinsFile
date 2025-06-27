@@ -1,25 +1,66 @@
-pipeline{
-    agent any
+pipeline {
+  agent any
 
-    environment {
-        ANSIBLE_HOST_KEY_CHECKING = 'False'
-        KUBE_CONFIG = credentials('kubeconfig-creds')
+  environment {
+    ANSIBLE_HOST_KEY_CHECKING = 'False'
+    KUBE_CONFIG = credentials('kubeconfig-creds')
+  }
+
+  stages {
+    stage('Install prerequisites if needed') {
+      steps {
+        sh '''
+          set -e
+
+          echo "🔍 Checking for snap..."
+          if ! command -v snap > /dev/null; then
+            echo "➡ snap not found, installing snapd..."
+            sudo apt update
+            sudo apt install -y snapd
+          else
+            echo "✅ snap already installed"
+          fi
+
+          echo "🔍 Checking for microk8s..."
+          if ! snap list microk8s > /dev/null 2>&1; then
+            echo "➡ microk8s not found, installing microk8s..."
+            sudo snap install microk8s --classic
+          else
+            echo "✅ microk8s already installed"
+          fi
+
+          echo "🔍 Checking for ansible-playbook..."
+          if ! command -v ansible-playbook > /dev/null; then
+            echo "➡ ansible-playbook not found, installing ansible..."
+            sudo apt update
+            sudo apt install -y ansible
+          else
+            echo "✅ ansible-playbook already installed"
+          fi
+
+          echo "✅ All prerequisites are now installed!"
+        '''
+      }
     }
 
-    stages {
-        stage('Checkout') {
-            steps { git url: 'https://github.com/ZachariasLiodakis/DevOps',
-            branch: 'main' }
-        }
-
-        stage('Deploy to K8s via Ansible') {
-            steps {
-                ansiblePlaybook(
-                    playbook: 'ansible/playbooks/deploy-k8s.yaml',
-                    inventory: 'ansible/playbooks/hosts.yaml',
-                    extras: "-e kubeconfig=${KUBE_CONFIG}"
-                )
-            }
-        }
+    stage('Checkout') {
+      steps {
+        git(
+          url: 'https://github.com/ZachariasLiodakis/DevOps',
+          branch: 'main'
+        )
+      }
     }
+
+    stage('Deploy to K8s via Ansible') {
+      steps {
+        ansiblePlaybook(
+          playbook: 'ansible/playbooks/deploy-k8s.yaml',
+          inventory: 'ansible/playbooks/hosts.yaml',
+          extras: "-e kubeconfig=${KUBE_CONFIG}",
+          colorized: true
+        )
+      }
+    }
+  }
 }
