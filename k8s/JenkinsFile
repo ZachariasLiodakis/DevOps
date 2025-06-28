@@ -48,7 +48,9 @@ pipeline {
           string(credentialsId: 'jenkins_ip', variable: 'JENKINS_IP')
         ]) {
           sh '''
-            ansible-playbook ansible/playbooks/setup-vm.yaml \
+            ansible-playbook 
+            -i ansible/hosts.yaml
+             ansible/playbooks/setup-vm.yaml \
               -e "microk8s_ip=$K8S_VM_IP jenkins_user=$JENKINS_USER jenkins_token=$JENKINS_TOKEN jenkins_ip=$JENKINS_IP"
           '''
           }
