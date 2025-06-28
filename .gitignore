@@ -40,7 +40,7 @@ out/
 # Datasource local storage ignored files
 /dataSources/
 /dataSources.local.xml
-.nx
+.nx/
 node_modules
 
 .cursor/rules/nx-rules.mdc
