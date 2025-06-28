@@ -1,10 +1,10 @@
 <table>
   <tr>
     <td>
-      <img src="https://github.com/ZachariasLiodakis/DevOps/blob/main/Deployment.png?raw=true" alt="DevOps" height="80" />
+      <img src="https://github.com/ZachariasLiodakis/DevOps/blob/main/Deployment.png?raw=true" alt="DevOps" height="100" />
     </td>
     <td style="vertical-align: middle;">
-      <h1>DevOps – Distributed Infrastructure Information System</h1>
+      <h1 style="font-size: 1em; margin: 0;">DevOps – Distributed Infrastructure Information System</h1>
     </td>
   </tr>
 </table>
