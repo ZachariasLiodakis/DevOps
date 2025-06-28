@@ -39,14 +39,30 @@ pipeline {
       }
     }
 
+    stage('Setup Remote Vm if not Configured'){
+      steps{
+        withCredentials([
+          string(credentialsId: 'k8s_vm_ip_creds', variable: 'K8S_VM_IP'),
+          string(credentialsId: 'jenkins_user', variable: 'JENKINS_USER'),
+          string(credentialsId: 'jenkins_token', variable: 'JENKINS_TOKEN'),
+          string(credentialsId: 'jenkins_ip', variable: 'JENKINS_IP')
+        ]) {
+          sh '''
+            ansible-playbook ansible/playbooks/setup-vms.yaml \
+              -e "microk8s_ip=$K8S_VM_IP jenkins_user=$JENKINS_USER jenkins_token=$JENKINS_TOKEN jenkins_ip=$JENKINS_IP"
+          '''
+          }
+      }
+    }
+
     stage('Deploy to K8s via Ansible') {
       steps {
-        withCredentials([file(credentialsId: 'kubeconfig-creds', variable: 'KUBECONFIG_FILE')]) {
+        withCredentials([file(credentialsId: 'kubeconfig-creds', variable: 'KUBECONFIG_FILE'), 
+        string(credentialsId: 'k8s_vm_ip_creds', variable: 'K8S_VM_IP')
+        ]) {
           sh '''
             export KUBECONFIG=$KUBECONFIG_FILE
-            ansible-playbook \
-              ansible/playbooks/deploy-k8s.yaml \
-              -e kubeconfig=$KUBECONFIG_FILE
+            ansible-playbook ansible/playbooks/deploy-k8s.yaml -e "microk8s_ip=$K8S_VM_IP"
           '''
         }
       }
