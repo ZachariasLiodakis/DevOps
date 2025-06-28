@@ -35,7 +35,7 @@ This project implements an information system ([Akinita](https://github.com/Zach
 
 ### 1. Deployment with Ansible on VM
 ```bash
-ansible-playbook -i ansible/hosts.yaml ansible/playbooks/spring.yaml -e "vm_ip=YOUR_VM_IP"
+ansible-playbook -i ansible/hosts.yaml ansible/playbooks/spring.yaml ansible/playbooks/email.yaml -e "vm_ip=YOUR_VM_IP"
 ```
 
 ### 2.1 Local Deployment with Docker Compose
