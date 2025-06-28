@@ -27,18 +27,16 @@
     when: not snap_installed_result or not microk8s_installed_result    
 
   - name: Configure ufw rules 
-  shell: |
-    ufw allow in on eth0 && \
-    ufw allow out on eth0 && \
-    ufw default allow routed && \
-    ufw enable
-  args:
+    shell: |
+      ufw allow in on eth0 && \
+      ufw allow out on eth0 && \
+      ufw default allow routed && \
+      ufw enable
+    args:
     warn: false
 
   - name: Enable microk8s addons
     shell: microk8s.enable dns storage ingress cert-manager
-    args:
-      warn: false
 
   - name: Configure kubeconfig
     shell: microk8s.kubectl config view --raw > ~/.kube/config
