@@ -47,14 +47,21 @@ pipeline {
           string(credentialsId: 'jenkins_token', variable: 'JENKINS_TOKEN'),
           string(credentialsId: 'jenkins_ip', variable: 'JENKINS_IP')
         ]) {
-          sh """
-            ansible-playbook -i ansible/hosts.yaml ansible/playbooks/setup-vm.yaml \
-              -e "microk8s_ip=$K8S_VM_IP" \
-              -e "jenkins_user=$JENKINS_USER" \
-              -e "jenkins_token=$JENKINS_TOKEN" \
-              -e "jenkins_ip=$JENKINS_IP"
-          """
+          withEnv([
+            "MICROK8S_IP=$K8S_VM_IP",
+            "JENKINS_USER=$JENKINS_USER",
+            "JENKINS_TOKEN=$JENKINS_TOKEN",
+            "JENKINS_IP=$JENKINS_IP"
+          ]) {
+            sh '''
+              ansible-playbook -i ansible/hosts.yaml ansible/playbooks/setup-vm.yaml \
+                -e microk8s_ip=$MICROK8S_IP \
+                -e jenkins_user=$JENKINS_USER \
+                -e jenkins_token=$JENKINS_TOKEN \
+                -e jenkins_ip=$JENKINS_IP \
+            '''
           }
+        }
       }
     }
 
