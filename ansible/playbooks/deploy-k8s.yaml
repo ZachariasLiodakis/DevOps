@@ -33,7 +33,7 @@
       ufw default allow routed && \
       ufw enable
     args:
-    warn: false
+      warn: false
 
   - name: Enable microk8s addons
     shell: microk8s.enable dns storage ingress cert-manager
