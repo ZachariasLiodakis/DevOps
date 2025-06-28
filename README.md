@@ -8,10 +8,11 @@ This project implements an information system ([Akinita](https://github.com/Zach
 - **Database**: PostgreSQL
 - **Admin Panel**: Spring Boot Admin
 - **Email Service**: Spring Boot (Java,Tomcat)
-- **CI/CD**: Jenkins + Jenkinsfile per component
+- **CI/CD**: Jenkins
 - **Containerization**: Docker & Docker Compose
 - **Configuration Management**: Ansible
 - **Orchestration**: Kubernetes (MicroK8s)
+- **ΝΧ**: Monorepo structure
 
 ## 📁 Monorepo Structure
 
