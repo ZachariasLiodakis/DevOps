@@ -23,7 +23,7 @@
 
     - name: Enable MicroK8s add-ons
       shell: |
-        microk8s enable dns ingress storage
+        microk8s enable dns ingress storage cert-manager
       args:
         executable: /bin/bash
 

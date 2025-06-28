@@ -6,6 +6,50 @@
     kubeconfig: "{{ lookup('env','KUBECONFIG') }}"
     workspace: "{{ lookup('env','WORKSPACE') | default('/var/lib/jenkins/workspace/K8S') }}"
 
+  pre_tasks:
+  - name: Check if snap is installed
+    shell: snap version
+    register: snap_installed_result
+    ignore_errors: true
+  
+  - name: Check if microk8s is installed
+    shell: snap info microk8s 
+    register: microk8s_installed_result
+    ignore_errors: true
+
+  - name: Set snap and microk8s Fact
+    set_fact:
+      snap_installed: "{{ snap_version_result.rc == 0 }}"
+      microk8s_installed: "{{ microk8s_info_result.rc == 0 }}"
+
+  - name: Install-microk8s playbook if snap or microk8s not installed
+    include_tasks: install-microk8s.yaml
+    when: not snap_installed_result or not microk8s_installed_result    
+
+  - name: Configure ufw rules 
+  shell: |
+    ufw allow in on eth0 && \
+    ufw allow out on eth0 && \
+    ufw default allow routed && \
+    ufw enable
+  args:
+    warn: false
+
+  - name: Enable microk8s addons
+    shell: microk8s.enable dns storage ingress cert-manager
+    args:
+      warn: false
+
+  - name: Configure kubeconfig
+    shell: microk8s.kubectl config view --raw > ~/.kube/config
+    
+  - name: Change kubeconfig ownership
+    file:
+      path: "~/.kube"
+      owner: "{{ ansible_user_id }}"
+      recurse: yes
+      state: directory  
+
   tasks:
     - name: Apply Cluster issuer
       shell: kubectl apply -f "{{ workspace }}/k8s/k8s-issuer.yaml"
