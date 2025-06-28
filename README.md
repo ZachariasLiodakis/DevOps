@@ -84,11 +84,7 @@ Step 1 ( installing microk8s ):
   Step 5:
 
   Edit the kubeconfig file, entering the mainApp-host-Vm's ip on the server block.
-  Delete the line 'certificate-authority-data:".."' under the  " cluster: " field
-  Enter a new line
-  ```bash
-    insecure-skip-tls-verify: true
-  ```
+  
   Basically ignoring the self signed certificates.
   
 `Install Jenkins on another Vm`
