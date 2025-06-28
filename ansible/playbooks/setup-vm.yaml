@@ -36,4 +36,4 @@
       jenkins_ip: "{{ jenkins_ip }}"
       jenkins_user: "{{ jenkins_user }}"
       jenkins_token: "{{ jenkins_token }}"
-    when: not hostvars['k8s_vm'].snap_installed_result_remote or not hostvars['k8s_vm'].microk8s_installed_result_remote
+    when: not hostvars['k8s-vm'].snap_installed_result_remote or not hostvars['k8s-vm'].microk8s_installed_result_remote
