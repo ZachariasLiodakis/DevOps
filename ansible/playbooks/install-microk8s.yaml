@@ -1,5 +1,5 @@
 - name: Install MicroK8s and enable essential add-ons on remote VM
-  hosts: k8s_vm
+  hosts: k8s-vm
   become: yes
   tasks:
     - name: Install snapd

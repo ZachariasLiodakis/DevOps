@@ -1,5 +1,5 @@
 - name: Install MicroK8s and enable essential add-ons on remote VM
-  hosts: k8s_vm
+  hosts: k8s-vm
 
   tasks:
   - name: Check if snap is installed
@@ -23,12 +23,11 @@
   vars:
     kubeconfig: "{{ lookup('env','KUBECONFIG') }}"
     workspace: "{{ lookup('env','WORKSPACE') | default('/var/lib/jenkins/workspace/K8S') }}"
-    microk8s_ip: "{{ lookup('env','MICROK8S_IP') }}"
-    jenkins_ip: "{{ lookup('env','JENKINS_IP') }}"
-    jenkins_user: "{{ lookup('env','JENKINS_USER') }}"
-    jenkins_token: "{{ lookup('env','JENKINS_TOKEN') }}"
-
-  tasks:
+    microk8s_ip: "{{ microk8s_ip }}"
+    jenkins_ip: "{{ jenkins_ip }}"
+    jenkins_user: "{{ jenkins_user }}"
+    jenkins_token: "{{ jenkins_token }}"
+    tasks:
 
   - name: Install-microk8s playbook if snap or microk8s not installed
     include_tasks: install-microk8s.yaml
