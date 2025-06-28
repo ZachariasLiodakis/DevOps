@@ -53,8 +53,7 @@ ansible-playbook -i ansible/hosts.yaml ansible/playbooks/deploy-compose.yaml -e 
 ### 3. Deployment with Jenkins and Kubernetes
 
   Step 1 ( install jenkins ):
-  
-      [Jenkins](https://www.jenkins.io/doc/book/installing/linux/)
+    [Jenkins](https://www.jenkins.io/doc/book/installing/linux/)
   
   Step 2 ( enable Jenkins ):
   ```bash
@@ -64,10 +63,10 @@ ansible-playbook -i ansible/hosts.yaml ansible/playbooks/deploy-compose.yaml -e 
 
   Once Jenkins is configured. Create credentials 'Secret Text'
 
-  k8s_vm_ip_creds	
-  jenkins_user	
-  jenkins_token	
-  jenkins_ip
+    k8s_vm_ip_creds	
+    jenkins_user	
+    jenkins_token	
+    jenkins_ip
 
   Step 4 ( Create keys on your jenkins and k8s Vms ):
 
@@ -77,7 +76,7 @@ ansible-playbook -i ansible/hosts.yaml ansible/playbooks/deploy-compose.yaml -e 
   ```
 
   Be sure you name your ssh-keys id_rsa...
-  Next add each key on the others Vm ssh-keys-file ( auhtorisedkeys, knownhosts etc.)
+  Next add each key on the other Vm's ssh-keys-file ( auhtorisedkeys, knownhosts etc.)
 
   Step 5:
 
