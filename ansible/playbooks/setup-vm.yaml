@@ -27,8 +27,8 @@
     jenkins_ip: "{{ jenkins_ip }}"
     jenkins_user: "{{ jenkins_user }}"
     jenkins_token: "{{ jenkins_token }}"
-    tasks:
 
+  tasks:
   - name: Install-microk8s playbook if snap or microk8s not installed
     include_tasks: install-microk8s.yaml
     vars:
