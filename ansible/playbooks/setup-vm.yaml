@@ -22,7 +22,6 @@
 
   vars:
     kubeconfig: "{{ lookup('env','KUBECONFIG') }}"
-    workspace: "{{ lookup('env','WORKSPACE') | default('/var/lib/jenkins/workspace/K8S') }}"
     microk8s_ip: "{{ microk8s_ip }}"
     jenkins_ip: "{{ jenkins_ip }}"
     jenkins_user: "{{ jenkins_user }}"

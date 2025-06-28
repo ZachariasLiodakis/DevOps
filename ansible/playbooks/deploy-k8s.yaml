@@ -1,31 +1,31 @@
 ---
 - hosts: localhost
   gather_facts: no
-  
+
   tasks:
     - name: Apply Cluster issuer
-      shell: kubectl apply -f "{{ workspace }}/k8s/k8s-issuer.yaml"
+      shell: kubectl apply -f "~/k8s/k8s-issuer.yaml"
 
     - name: Apply Spring Deployment
-      shell:  kubectl apply -f "{{ workspace }}/k8s/Akinita-spring/spring-deployment.yaml"
+      shell:  kubectl apply -f "~/k8s/Akinita-spring/spring-deployment.yaml"
       
     - name: Apply Spring Service
-      shell:  kubectl apply -f "{{ workspace }}/k8s/Akinita-spring/spring-svc.yaml"
+      shell:  kubectl apply -f "~/k8s/Akinita-spring/spring-svc.yaml"
 
     - name: Apply Spring Ingress
-      shell:  kubectl  apply -f "{{ workspace }}/k8s/Akinita-spring/spring-ingress.yaml"
+      shell:  kubectl  apply -f "~/k8s/Akinita-spring/spring-ingress.yaml"
 
     - name: Apply Postgres Deployment
-      shell:  kubectl apply -f "{{ workspace }}/k8s/postgres/postgres-deployment.yaml"
+      shell:  kubectl apply -f "~/k8s/postgres/postgres-deployment.yaml"
 
     - name: Apply Postgres Persistent Volume
-      shell:  kubectl apply -f "{{ workspace }}/k8s/postgres/postgres-pvc.yaml"
+      shell:  kubectl apply -f "~/k8s/postgres/postgres-pvc.yaml"
 
     - name: Apply Postgres Service
-      shell:  kubectl apply -f "{{ workspace }}/k8s/postgres/postgres-svc.yaml"
+      shell:  kubectl apply -f "~/k8s/postgres/postgres-svc.yaml"
 
     - name: Apply Email Deployment
-      shell:  kubectl apply -f "{{ workspace }}/k8s/Email/email-deployment.yaml"
+      shell:  kubectl apply -f "~/k8s/Email/email-deployment.yaml"
 
     - name: Apply Email Service
-      shell: kubectl apply -f "{{ workspace }}/k8s/Email/email-svc.yaml"
+      shell: kubectl apply -f "~/k8s/Email/email-svc.yaml"
