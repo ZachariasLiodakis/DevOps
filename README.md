@@ -70,7 +70,7 @@ Step 1 ( installing microk8s ):
   ```
   Step 4 ( enabling services ):
   ```bash
-    microk8s.enable dns storage ingress
+    microk8s.enable dns storage ingress cert-manager
   ```
   Step 5 ( setting up the kubeconfig ):
   ```bash
