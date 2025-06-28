@@ -54,7 +54,7 @@ ansible-playbook -i ansible/hosts.yaml ansible/playbooks/deploy-compose.yaml -e 
 
   Step 1 ( install jenkins ):
   
-  [Jenkins](https://www.jenkins.io/doc/book/installing/linux/)
+      [Jenkins](https://www.jenkins.io/doc/book/installing/linux/)
   
   Step 2 ( enable Jenkins ):
   ```bash
