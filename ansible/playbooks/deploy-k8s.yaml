@@ -7,6 +7,9 @@
     workspace: "{{ lookup('env','WORKSPACE') | default('/var/lib/jenkins/workspace/K8S') }}"
 
   tasks:
+    - name: Apply Cluster issuer
+      shell: kubectl apply -f "{{ workspace }}/k8s/k8s-issuer.yaml"
+
     - name: Apply Spring Deployment
       shell:  kubectl apply -f "{{ workspace }}/k8s/Akinita-spring/spring-deployment.yaml"
       
