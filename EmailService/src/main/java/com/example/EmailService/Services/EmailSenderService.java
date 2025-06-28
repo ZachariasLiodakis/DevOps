@@ -20,7 +20,7 @@ public class EmailSenderService {
         MimeMessage message = mailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message, true);
 
-        helper.setTo("it2022071@hua.gr");             // change meta se 'to'
+        helper.setTo(to);
         helper.setSubject(subject);
 
         try(var inputStream = EmailSenderService.class.getResourceAsStream("/templates/Email.html")){

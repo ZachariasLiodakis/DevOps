@@ -1,0 +1,43 @@
+{
+  "version": 2,
+  "projects": {
+    "akinita-api": {
+      "root": "Akinita/Akinita",
+      "sourceRoot": "Akinita/Akinita/src",
+      "projectType": "application",
+      "targets": {
+        "build": {
+          "executor": "nx:run-commands",
+          "options": {
+            "command": "cd Akinita/Akinita && chmod +x ./mvnw && ./mvnw clean package"
+          }
+        },
+        "test": {
+          "executor": "nx:run-commands",
+          "options": {
+            "command": "cd Akinita/Akinita && chmod +x ./mvnw && ./mvnw test"
+          }
+        }
+      }
+    },
+    "email-service": {
+      "root": "EmailService",
+      "sourceRoot": "EmailService/src",
+      "projectType": "application",
+      "targets": {
+        "build": {
+          "executor": "nx:run-commands",
+          "options": {
+            "command": "cd EmailService && chmod +x ./mvnw && ./mvnw clean package"
+          }
+        },
+        "test": {
+          "executor": "nx:run-commands",
+          "options": {
+            "command": "cd EmailService && chmod +x ./mvnw && ./mvnw test"
+          }
+        }
+      }
+    }
+  }
+}

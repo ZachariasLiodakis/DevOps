@@ -9,6 +9,13 @@
         update_cache: yes
       become: yes
 
+    - name: Install Maven
+      apt:
+        name: maven
+        state: present
+        update_cache: yes
+      become: yes
+
   tasks:
     - name: "debug appdir"
       ansible.builtin.debug:
@@ -16,6 +23,7 @@
 
     - name: "Build spring email project"
       block:
+
         - name: Ensure mvnw is executable
           file:
             path: "{{ appdir }}/EmailService/mvnw"
@@ -24,10 +32,10 @@
           become: yes
 
         - name: "Build the Spring Email application"
-          become: yes
-          command: "./mvnw package -Dmaven.test.skip "
+          command: "mvn package -Dmaven.test.skip"
           args:
             chdir: "{{ appdir }}/EmailService"
+
       rescue:
 
         - name: Fetch the SHA-512 checksum for Maven 3.9.9
@@ -43,7 +51,7 @@
 
         - name: Replace the distributionSha512Sum line in maven-wrapper.properties
           replace:
-            path: "{{ appdir }}/EmailService/.mvn/wrapper/maven-wrapper.properties"
+            path: "{{ appdir }}/Akinita/Akinita/.mvn/wrapper/maven-wrapper.properties"
             regexp: '^distributionSha'
             replace: "distributionSha512Sum={{ sha512_checksum.stdout }}"
 
@@ -53,6 +61,7 @@
             state: absent
           when: sha512_checksum is defined
 
+
       always:
         - name: Make mvnw executable
           file:
@@ -60,10 +69,10 @@
             mode: '0755'
             state: file
 
-        - name: "Build the Spring application"
-          command: "./mvnw package -Dmaven.test.skip"
+        - name: "Build the Spring email application"
+          command: "mvn package -Dmaven.test.skip"
           args:
-            chdir: "{{ appdir }}/Akinita/Akinita"
+            chdir: "{{ appdir }}/EmailService"
 
     - name: copy spring email service file
       template:
@@ -71,24 +80,24 @@
         dest: "/etc/systemd/system/email.service"
       become: yes
       become_user: root
-      notify: restart spring
+      notify: restart email
 
     - name: reload spring service
       service:
-        name: spring
+        name: email
         state: restarted
       become: yes
 
     - name: ensure spring service started
       service:
-        name: spring
+        name: email
         state: started
         enabled: yes
       become: yes
 
   handlers:
-    - name: restart spring
+    - name: restart email
       service:
-        name: spring
+        name: email
         state: restarted
       become: yes

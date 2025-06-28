@@ -1,0 +1,55 @@
+pipeline {
+  agent any
+
+  environment {
+    ANSIBLE_HOST_KEY_CHECKING = 'False'
+  }
+
+  stages {
+    stage('Install prerequisites if needed') {
+      steps {
+        sh '''
+          set -e
+          echo "🔍 Checking prerequisites..."
+          if ! command -v snap > /dev/null; then
+            sudo apt update
+            sudo apt install -y snapd
+          fi
+          if ! snap list microk8s > /dev/null 2>&1; then
+            sudo snap install microk8s --classic
+          fi
+          if ! command -v ansible-playbook > /dev/null; then
+            sudo apt update
+            sudo apt install -y ansible
+          fi
+          if ! command -v kubectl > /dev/null; then
+            sudo snap install kubectl --classic
+          fi
+          echo "✅ Prerequisites OK"
+        '''
+      }
+    }
+
+    stage('Checkout') {
+      steps {
+        git(
+          url: 'https://github.com/ZachariasLiodakis/DevOps',
+          branch: 'main'
+        )
+      }
+    }
+
+    stage('Deploy to K8s via Ansible') {
+      steps {
+        withCredentials([file(credentialsId: 'kubeconfig-creds', variable: 'KUBECONFIG_FILE')]) {
+          sh '''
+            export KUBECONFIG=$KUBECONFIG_FILE
+            ansible-playbook \
+              ansible/playbooks/deploy-k8s.yaml \
+              -e kubeconfig=$KUBECONFIG_FILE
+          '''
+        }
+      }
+    }
+  }
+}

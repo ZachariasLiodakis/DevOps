@@ -1,8 +1,8 @@
 # Stage 1: Build the Spring Boot app
 FROM maven:3.9.6-eclipse-temurin-21 AS builder
 WORKDIR /build
-COPY EmailService/pom.xml .
-COPY EmailService/src ./src
+COPY pom.xml .
+COPY src ./src
 RUN mvn clean package -DskipTests
 
 # Stage 2: Create the final image
