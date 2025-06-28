@@ -1,7 +1,7 @@
 <table>
   <tr>
     <td>
-      <img src="https://github.com/ZachariasLiodakis/DevOps/blob/main/Deployment.png?raw=true" alt="DevOps" height="100" />
+      <img src="https://github.com/ZachariasLiodakis/DevOps/blob/main/Deployment.png?raw=true" alt="DevOps" height="80" />
     </td>
     <td style="vertical-align: middle;">
       <h1>DevOps – Distributed Infrastructure Information System</h1>
