@@ -51,65 +51,35 @@ docker-compose up --build
 ansible-playbook -i ansible/hosts.yaml ansible/playbooks/deploy-compose.yaml -e "vm_ip=YOUR_VM_IP"
 ```
 ### 3. Deployment with Jenkins and Kubernetes
-`Set up your mainApp-host Vm, installed with snap, microk8s, kubectl`
 
-Step 1 ( installing microk8s ):
-  ```bash
-    sudo snap install microk8s --classic
-  ```
-  Step 2 ( allowing routes ):
-  ```bash
-    sudo ufw allow in on ethh0 && sudo ufw allow out on eth0
-    sudo ufw default allow routed    
-  ```
-  Step 3 ( configuring ./kube dir ):
-  ```bash
-    sudo usermod -a -G microk8s $USER   ( needs exiting and re-entering the vm )
-    mkdir ~/.kube
-    sudo chown -f -R $USER ~/.kube
-    sudo su - $USER
-  ```
-  Step 4 ( enabling services ):
-  ```bash
-    microk8s.enable dns storage ingress cert-manager
-  ```
-  Step 5 ( setting up the kubeconfig ):
-  ```bash
-    microk8s.kubectl config view --raw > ~/.kube/config
-  ```
-  Step 6:
-  
-  Copy the config and save it locally on your computer.
-
-  Step 5:
-
-  Edit the kubeconfig file, entering the mainApp-host-Vm's ip on the server block.
-  
-  Basically ignoring the self signed certificates.
-  
-`Install Jenkins on another Vm`
-
-  Step 1 ( enter the jenkins-Vm and install java ):
-  ```bash
-    sudo apt install fontconfig openjdk-21-jre
-    sudo apt install openjdk-21-jdk
-  ```
-  Step 2 ( install jenkins ):
+  Step 1 ( install jenkins ):
   
   [Jenkins](https://www.jenkins.io/doc/book/installing/linux/)
   
-  Step 3 ( enable Jenkins ):
+  Step 2 ( enable Jenkins ):
   ```bash
     sudo systemctl enable jenkins
   ```
-  Step 4:
+  Step 3:
 
-  Once Jenkins is configured. Create a credential 'Secret File' with the kubeconfig file saved locally.
-  Name it ```"kubeconfig-creds"```.
+  Once Jenkins is configured. Create credentials 'Secret Text'
 
-  `Create the Pipeline job in Jenkins`
+  k8s_vm_ip_creds	
+  jenkins_user	
+  jenkins_token	
+  jenkins_ip
 
-  Final Step:
+  Step 4 ( Create keys on your jenkins and k8s Vms ):
+
+  On both of the Vms run:
+  ```bash
+  ssh-keygen -t rsa -b 4096 -C "your_email@example.com"
+  ```
+
+  Be sure you name your ssh-keys id_rsa...
+  Next add each key on the others Vm ssh-keys-file ( auhtorisedkeys, knownhosts etc.)
+
+  Step 5:
 
   Create a pipeline job in Jenkins with this repo, and the jenkinsFile in the directory k8s/JenkinsFile.
   You are ready to Build.
