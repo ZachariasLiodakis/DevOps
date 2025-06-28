@@ -19,8 +19,8 @@
 
   - name: Set snap and microk8s Fact
     set_fact:
-      snap_installed: "{{ snap_version_result.rc == 0 }}"
-      microk8s_installed: "{{ microk8s_info_result.rc == 0 }}"
+      snap_installed: "{{ snap_installed_result.rc == 0 }}"
+      microk8s_installed: "{{ microk8s_installed_result.rc == 0 }}"
 
   - name: Install-microk8s playbook if snap or microk8s not installed
     include_tasks: install-microk8s.yaml
