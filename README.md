@@ -96,3 +96,5 @@ ansible-playbook -i ansible/hosts.yaml ansible/playbooks/deploy-compose.yaml -e 
 ## ⚙️ Application Access
 - For accessing the application via VM: http://YOUR_VM_IP:8080
 - For accessing the application locally: http://localhost:8080
+- The "application.properties" file on the email service must be updated to match the SMTP server information.
+
