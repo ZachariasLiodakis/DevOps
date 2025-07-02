@@ -42,6 +42,8 @@ This project implements an information system ([Akinita](https://github.com/Zach
   [Ansible + Microk8s + Jenkins](https://youtu.be/n4xYRxjVICY)
 
 ## 🚀 Startup Instructions
+- Ansible must be installed before running the "ansible-playbook" command please refer to the documentation [here](https://docs.ansible.com/ansible/latest/installation_guide/index.html)
+- Docker must be installed before running the "docker-compose" command please refer to the documentation [here](https://docs.docker.com/compose/install/)
 
 ### 1. Deployment with Ansible on VM
 ```bash
@@ -49,7 +51,6 @@ ansible-playbook -i ansible/hosts.yaml ansible/playbooks/spring.yaml ansible/pla
 ```
 
 ### 2.1 Local Deployment with Docker Compose
-
 ```bash
 cd /path/to/DevOps
 docker-compose up --build
@@ -59,6 +60,7 @@ docker-compose up --build
 ```bash
 ansible-playbook -i ansible/hosts.yaml ansible/playbooks/deploy-compose.yaml -e "vm_ip=YOUR_VM_IP"
 ```
+
 ### 3. Deployment with Jenkins and Kubernetes
 
   Step 1 ( install jenkins ):
