@@ -47,6 +47,7 @@ This project implements an information system ([Akinita](https://github.com/Zach
 
 ### 1. Deployment with Ansible on VM
 ```bash
+cd /path/to/DevOps
 ansible-playbook -i ansible/hosts.yaml ansible/playbooks/spring.yaml ansible/playbooks/email.yaml -e "vm_ip=YOUR_VM_IP"
 ```
 
@@ -58,6 +59,7 @@ docker-compose up --build
 
 ### 2.2 Deployment with Docker Compose and Ansible on VM
 ```bash
+cd /path/to/DevOps
 ansible-playbook -i ansible/hosts.yaml ansible/playbooks/deploy-compose.yaml -e "vm_ip=YOUR_VM_IP"
 ```
 
