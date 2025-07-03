@@ -16,10 +16,12 @@
   },
   "projects": {
     "akinita-api": {
-      "root": "Akinita/Akinita"
+      "root": "Akinita/Akinita",
+      "sourceRoot": "Akinita/Akinita/src"
     },
     "email-service": {
-      "root": "EmailService"
+      "root": "EmailService",
+      "sourceRoot": "EmailService/src"
     }
   }
 }

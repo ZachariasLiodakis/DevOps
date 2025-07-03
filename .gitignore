@@ -30,9 +30,6 @@ certs/
 *.iws
 out/
 
-# VSC
-.vscode
-
 # Default ignored files
 /shelf/
 /workspace.xml
