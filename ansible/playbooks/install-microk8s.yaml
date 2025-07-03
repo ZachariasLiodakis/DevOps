@@ -1,6 +1,5 @@
----
-- name: Install MicroK8s and enable essential add-ons
-  hosts: all
+- name: Install MicroK8s and enable essential add-ons on remote VM
+  hosts: k8s-vm
   become: yes
   tasks:
     - name: Install snapd
@@ -15,28 +14,78 @@
         state: present
         classic: yes
 
-    - name: Add user to microk8s group
-      user:
-        name: "{{ ansible_user }}"
-        groups: microk8s
-        append: yes
-
-    - name: Enable MicroK8s add-ons
+    - name: Configure ufw rules 
       shell: |
-        microk8s enable dns ingress storage
-      args:
-        executable: /bin/bash
+        ufw allow in on eth0 && \
+        ufw allow out on eth0 && \
+        ufw default allow routed && \
+        ufw enable
 
-    - name: Wait for MicroK8s to be ready
-      shell: |
-        microk8s status --wait-ready
-      args:
-        executable: /bin/bash
+    - name: Enable microk8s addons
+      shell: microk8s.enable dns storage ingress cert-manager
 
-    - name: Configure kubeconfig for user
-      shell: |
-        microk8s config > /home/{{ ansible_user }}/.kube/config
-      args:
-        executable: /bin/bash
-      become: yes
-      become_user: "{{ ansible_user }}"
+    - name: Configure kubeconfig
+      shell: microk8s.kubectl config view --raw > ~/.kube/config
+
+    - name: Replace IP address in kubeconfig with VM IP
+      replace:
+        path: ~/.kube/config
+        regexp: 'server: https?://[^:]+:16443'
+        replace: "server: https://{{ micrk8s_ip }}:16443"
+
+    - name: Read kubeconfig and encode base64
+      command: base64 ~/.kube/config
+      register: kubeconfig_base64_raw
+
+    - name: Set kubeconfig_content_base64 fact
+      set_fact:
+        kubeconfig_content_base64: "{{ kubeconfig_base64_raw.stdout }}"
+
+    - name: Save kubeconfig base64 to file (optional)
+      copy:
+        content: "{{ kubeconfig_content_base64 }}"
+        dest: /tmp/kubeconfig_base64.txt
+      delegate_to: localhost  # αν θες να το έχεις και τοπικά
+
+- name: Create Jenkins credential on Jenkins server
+  hosts: localhost
+  vars:
+    jenkins_url: "http://jenkins-server:8080"
+    jenkins_user: "{{ jeknins_user }}"
+    jenkins_token: "{{ jenkins_token }}"
+    kubeconfig_content_base64: "{{ hostvars['remote_vm'].kubeconfig_content_base64 }}"
+  tasks:
+    - name: Install snapd
+      apt:
+        name: snapd
+        state: present
+        update_cache: yes
+
+    - name: Install MicroK8s
+      snap:
+        name: microk8s
+        state: present
+        classic: yes
+
+    - name: Create Jenkins credential XML file
+      copy:
+        dest: /tmp/credential.xml
+        content: |
+          <com.cloudbees.plugins.credentials.impl.FileCredentialsImpl>
+            <scope>GLOBAL</scope>
+            <id>kubeconfig-creds</id>
+            <description>Kubeconfig secret file</description>
+            <fileName>config</fileName>
+            <secretBytes>{{ kubeconfig_content_base64 }}</secretBytes>
+          </com.cloudbees.plugins.credentials.impl.FileCredentialsImpl>
+
+    - name: Download Jenkins CLI jar
+      get_url:
+        url: "{{ jenkins_url }}/jnlpJars/jenkins-cli.jar"
+        dest: /tmp/jenkins-cli.jar
+        mode: '0755'
+
+    - name: Run Jenkins CLI to create credential
+      shell: >
+        java -jar /tmp/jenkins-cli.jar -s {{ jenkins_url }} -auth {{ jenkins_user }}:{{ jenkins_token }}
+        create-credentials-by-xml system::system::jenkins _ < /tmp/credential.xml

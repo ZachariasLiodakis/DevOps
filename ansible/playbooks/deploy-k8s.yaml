@@ -1,44 +1,35 @@
+---
 - hosts: localhost
   gather_facts: no
-  collections:
-    - kubernetes.core
-  tasks:
-    - name: Apply Spring Deployment
-      kubernetes.core.k8s:
-        src: ../k8s/Akinita-Spring/spring-deployment.yaml
-        state: present
+  
+  vars:
+    workspace: "{{ lookup('env','WORKSPACE') }}"
 
+
+  tasks:
+    - name: Apply Cluster issuer
+      shell: kubectl apply -f "{{ workspace }}/k8s/k8s-issuer.yaml"
+
+    - name: Apply Spring Deployment
+      shell:  kubectl apply -f "{{ workspace }}/k8s/Akinita-spring/spring-deployment.yaml"
+      
     - name: Apply Spring Service
-      kubernetes.core.k8s:
-        src: ../k8s/Akinita-Spring/spring-service.yaml
-        state: present
+      shell:  kubectl apply -f "{{ workspace }}/k8s/Akinita-spring/spring-svc.yaml"
 
     - name: Apply Spring Ingress
-      kubernetes.core.k8s:
-        src: ../k8s/Akinita-Spring/spring-ingress.yaml
-        state: present
+      shell:  kubectl  apply -f "{{ workspace }}/k8s/Akinita-spring/spring-ingress.yaml"
 
     - name: Apply Postgres Deployment
-      kubernetes.core.k8s:
-        src: ../k8s/Postgres/postgres-deployment.yaml
-        state: present
+      shell:  kubectl apply -f "{{ workspace }}/k8s/postgres/postgres-deployment.yaml"
 
     - name: Apply Postgres Persistent Volume
-      kubernetes.core.k8s:
-      src: ../k8s/Postgres/postgres-pvc.yaml
-      state: present
+      shell:  kubectl apply -f "{{ workspace }}/k8s/postgres/postgres-pvc.yaml"
 
     - name: Apply Postgres Service
-      kubernetes.core.k8s:
-        src: ../k8s/Postgres/postgres-svc.yaml
-        state: present
+      shell:  kubectl apply -f "{{ workspace }}/k8s/postgres/postgres-svc.yaml"
 
     - name: Apply Email Deployment
-      kubernetes.core.k8s:
-        src: ../k8s/Email/email-deployment.yaml
-        state: present
+      shell:  kubectl apply -f "{{ workspace }}/k8s/Email/email-deployment.yaml"
 
     - name: Apply Email Service
-      kubernetes.core.k8s:
-        src: ../k8s/Email/email-service.yaml
-        state: present
+      shell: kubectl apply -f "{{ workspace }}/k8s/Email/email-svc.yaml"

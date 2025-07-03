@@ -1,0 +1,18 @@
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  name: letsencrypt
+spec:
+  acme:
+    # Αντικατάστησε με το δικό σου email
+    email: bramis04chris@gmail.com
+    # Let’s Encrypt production endpoint
+    server: https://acme-v02.api.letsencrypt.org/directory
+    privateKeySecretRef:
+      # Μυστικό για το κλειδί του ACME account
+      name: letsencrypt-account-key
+    solvers:
+    - http01:
+        ingress:
+          # Κλάση ingress που χρησιμοποιείς (π.χ. nginx ή public)
+          class: public

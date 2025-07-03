@@ -3,10 +3,15 @@ kind: Ingress
 metadata:
   name: spring-ingress
   annotations:
+    cert-manager.io/cluster-issuer: "letsencrypt"
     nginx.ingress.kubernetes.io/rewrite-target: /
 spec:
+  tls:
+  - hosts:
+    - akinita.ip-ddns.com
+    secretName: spring-tls
   rules:
-  - host: "akinita.ip-ddns.com"
+  - host: akinita.ip-ddns.com
     http:
       paths:
       - path: /

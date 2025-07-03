@@ -46,6 +46,8 @@ spec:
           value: dbuser
         - name: SPRING_DATASOURCE_PASSWORD
           value: pass123
+        - name: EMAIL_SERVICE_URL
+          value: http://email:8081
         ports:
         - containerPort:  8080
           name:  spring
